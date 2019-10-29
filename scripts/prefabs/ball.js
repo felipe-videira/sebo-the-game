@@ -11,7 +11,7 @@ class Ball extends GameObject {
         radius = 10, 
         speed = 2 
     } = {}) {
-        super(); 
+        super("Ball"); 
 
         this._color = color;
         this._radius = radius;
@@ -22,13 +22,16 @@ class Ball extends GameObject {
     }
 
     start () {
-        this.getComponent('Rigidbody')
-            .setPosition(Canvas.dimensions.width / 2, Canvas.dimensions.height - 30)
+        super.start();
+
+        this.getComponent('Rigidbody').setPosition(Canvas.dimensions.width / 2, Canvas.dimensions.height - 30)
 
         this.getComponent("Collision").onCollision = this._handleCollision
     }
 
     update () {
+        super.update();
+        
         Canvas.createCircle({
             x: this.transform.x, 
             y: this.transform.y,  

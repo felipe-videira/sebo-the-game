@@ -1,6 +1,5 @@
 class RigidBody extends Component {
     
-    _name = "Rigidbody";
     _collision;
     _userRef
 
@@ -26,17 +25,17 @@ class RigidBody extends Component {
         this._useGravity = useGravity;
     }
 
+    get name () {
+        return "Rigidbody";
+    }
+
     move (x, y, speed) {
         this._userRef.transform.x += speed * x;
         this._userRef.transform.y += speed * y;
-
-        this._userRef.getComponent("Collision").detectCollision();
     }
 
     setPosition (x, y) {
         this._userRef.transform.x = x;
         this._userRef.transform.y = y;
-
-        this._userRef.getComponent("Collision").detectCollision();
     }
 }

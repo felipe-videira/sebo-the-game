@@ -11,7 +11,7 @@ class Paddle extends GameObject {
         width = 10,
         height = 75
     } = {}) {
-        super(); 
+        super("Paddle"); 
 
         this._color = color;
         this._speed = speed;
@@ -23,11 +23,15 @@ class Paddle extends GameObject {
     }
     
     start () {
+        super.start();
+
         this.getComponent('Rigidbody')
-            .setPosition((Canvas.dimensions.width - this._width) / 2, Canvas.dimensions.height - this._height)
+            .setPosition((Canvas.dimensions.width - this._width) / 2, Canvas.dimensions.height - this._height);
     }
 
     update () {
+        super.update();
+
         Canvas.createPolygon({
             x: this.transform.x,
             y: this.transform.y,

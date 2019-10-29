@@ -1,19 +1,11 @@
-/* Services */
-const EvtEmitter = new EventEmitter();
 const Canvas = new CanvasHandler();
-const Input = new UserInput()
+const Input = new UserInput();
+const Scenes = new SceneManager();
 
+Scenes.addScene(new MainScene())
 
-/* Game Objects */
-new Paddle();
-// new Ball();
+Scenes.start()
 
-
-/* Initializing */
-EvtEmitter.emit('start');
-
-
-/* Game loop */
 setInterval(() => {
-    EvtEmitter.emit('update');
+    Scenes.update()
 }, 10);
