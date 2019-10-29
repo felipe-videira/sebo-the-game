@@ -1,6 +1,6 @@
 class RigidBody extends Component {
     
-    _title = "RigidBody";
+    _name = "Rigidbody";
     _collision;
     _userRef
 
@@ -9,7 +9,7 @@ class RigidBody extends Component {
     _mass;
     _useGravity;
 
-    constructor(userRef, { mass = 10, useGravity = false }) {
+    constructor(userRef, { mass = 10, useGravity = false } = {}) {
         super();
         
         this._userRef = userRef;

@@ -11,7 +11,7 @@ class MonoBehaviour {
         throw Error("Do not access the components directly!")
     } 
 
-    set components () {
+    set components (v) {
         throw Error("Do not set the components directly!")
     } 
 
