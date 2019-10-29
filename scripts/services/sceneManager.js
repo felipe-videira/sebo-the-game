@@ -5,6 +5,8 @@ class SceneManager extends MonoBehaviour {
     _activeScenes = {};
 
     constructor (activeScenes = []) {
+        super();
+
         this.addScenes(activeScenes);
     }
 
@@ -39,9 +41,9 @@ class SceneManager extends MonoBehaviour {
     addScene (scene) {
         this._validateScene(scene);
         
-        this._activeScenes[scene.displayName] = scene;
+        this._activeScenes[scene.name] = scene;
 
-        if (this._started) this._activeScenes[scene.displayName].start();
+        if (this._started) this._activeScenes[scene.name].start();
     }
 
     removeScene (sceneName) {

@@ -1,8 +1,10 @@
-class CanvasHandler {
+class CanvasHandler extends MonoBehaviour {
     _mainCanvas;
     _ctx;
     
     constructor() {
+        super();
+        
         if (!!CanvasHandler.instance) {
             return CanvasHandler.instance;
         }
@@ -11,12 +13,12 @@ class CanvasHandler {
         this._mainCanvas = document.getElementById("mainCanvas");
         this._ctx = mainCanvas.getContext("2d");
 
-        EvtEmitter.on('update', () => this._clear())
-
         return this;
     }
 
-    _clear () {
+    update () {
+        super.update();
+
         this._ctx.clearRect(0, 0, this._mainCanvas.width, this._mainCanvas.height);
     }
     

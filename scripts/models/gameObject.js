@@ -6,16 +6,16 @@ class GameObject extends MonoBehaviour {
     };
     _components = {};
     _started = false;
-    _displayName;
+    _name;
 
-    constructor (displayName) {
+    constructor (name) {
         super();
         
-        this._displayName = displayName;
+        this._name = name;
     }
 
-    get displayName () {
-        return this._displayName;
+    get name () {
+        return this._name;
     }
 
     get isGameObject () {
@@ -57,9 +57,9 @@ class GameObject extends MonoBehaviour {
     addComponent (component = null) {
         this._validateComponent(component);
         
-        this._components[component.displayName] = component;
+        this._components[component.name] = component;
 
-        if (this._started) this._components[component.displayName].start();
+        if (this._started) this._components[component.name].start();
     }
 
     getComponent (name) {

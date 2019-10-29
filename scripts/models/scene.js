@@ -3,6 +3,8 @@ class Scene extends MonoBehaviour {
     _gameObjects = [];
 
     constructor (gameObjects = []) {
+        super();
+
         this.addGameObjects(gameObjects)
     }
 
@@ -31,7 +33,7 @@ class Scene extends MonoBehaviour {
     }
 
     addGameObjects (gameObjects = []) {
-        for (const gameObject in gameObjects) {
+        for (const gameObject of gameObjects) {
             this.addGameObject(gameObject)
         }
     } 

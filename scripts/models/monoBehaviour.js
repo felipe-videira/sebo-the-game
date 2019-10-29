@@ -1,6 +1,6 @@
 class MonoBehaviour {
     
-    get displayName () {
+    get name () {
         throw Error('This MonoBehaviour does not have a name!');
     }
 
