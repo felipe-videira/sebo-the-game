@@ -3,7 +3,7 @@ class MainScene extends Scene {
     constructor () {
         super();
         
-        this.addGameObjects([
+        this.addMonoBehaviours([
             new Ball(),
             new Paddle()
         ])

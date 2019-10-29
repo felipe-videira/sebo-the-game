@@ -1,4 +1,4 @@
-class EventEmitter {  
+class EventEmitter extends MonoBehaviour {  
     _listeners = {}   
     
     constructor () {

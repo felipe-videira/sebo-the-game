@@ -7,7 +7,15 @@ class SceneManager extends MonoBehaviour {
     constructor (activeScenes = []) {
         super();
 
+        if (!!SceneManager.instance) {
+            return SceneManager.instance;
+        }
+
+        SceneManager.instance = this;
+
         this.addScenes(activeScenes);
+        
+        return this;
     }
 
     get activeScenes () {
@@ -47,6 +55,8 @@ class SceneManager extends MonoBehaviour {
     }
 
     removeScene (sceneName) {
+        if (sceneName === 'PersitentScene') return false;
+
         return delete this._activeScenes[sceneName];
     }
 

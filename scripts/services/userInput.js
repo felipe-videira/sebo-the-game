@@ -1,4 +1,5 @@
-class UserInput {
+class UserInput extends MonoBehaviour {
+
     _validRightKeys = ["Right", "ArrowRight", "d", "KeyD"]
     _validLeftKeys = ["Left", "ArrowLeft", "a", "KeyA"]
     _validUpKeys = ["Up", "ArrowUp", "w", "KeyW"]
@@ -7,8 +8,18 @@ class UserInput {
     _y = 0;
 
     constructor() {
+        super();
+
+        if (!!UserInput.instance) {
+            return UserInput.instance;
+        }
+
+        UserInput.instance = this;
+
         document.addEventListener("keydown", e => this._keyDownHandler(e), false);
         document.addEventListener("keyup", e => this._keyUpHandler(e), false);
+        
+        return this;
     }
 
     get x () {

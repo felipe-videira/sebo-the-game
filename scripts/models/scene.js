@@ -1,11 +1,11 @@
 class Scene extends MonoBehaviour {
 
-    _gameObjects = [];
+    _monoBehaviours = [];
 
-    constructor (gameObjects = []) {
+    constructor (monoBehaviours = []) {
         super();
 
-        this.addGameObjects(gameObjects)
+        this.addMonoBehaviours(monoBehaviours)
     }
 
     get isScene () {
@@ -19,34 +19,34 @@ class Scene extends MonoBehaviour {
     start () {
         super.start();
 
-        for (const gameObject of this._gameObjects) {
-            gameObject.start();
+        for (const monoBehaviour of this._monoBehaviours) {
+            monoBehaviour.start();
         }
     }
 
     update () {
         super.update();
 
-        for (const gameObject of this._gameObjects) {
-            gameObject.update();
+        for (const monoBehaviour of this._monoBehaviours) {
+            monoBehaviour.update();
         }
     }
 
-    addGameObjects (gameObjects = []) {
-        for (const gameObject of gameObjects) {
-            this.addGameObject(gameObject)
+    addMonoBehaviours (monoBehaviours = []) {
+        for (const monoBehaviour of monoBehaviours) {
+            this.addGameObject(monoBehaviour)
         }
     } 
 
-    addGameObject(gameObject = null) {
-        this._validateGameObject(gameObject)
+    addMonoBehaviour (monoBehaviour = null) {
+        this._validateMonoBehaviour(monoBehaviour)
         
-        this._gameObjects.push(gameObject)
+        this._monoBehaviours.push(monoBehaviour)
     }
 
-    _validateGameObject (v) {
-        if (!v || !v.isGameObject) {
-            throw Error("You are tring to add something that is not a GameObject!")
+    _validateMonoBehaviour (v) {
+        if (!v || !v.isMonoBehaviour) {
+            throw Error("You are tring to add something that is not a MonoBehaviour!")
         }
     }
 }
