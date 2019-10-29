@@ -1,7 +1,10 @@
-const Scenes = new SceneManager();
+const sceneManager = new SceneManager([ 
+    new PersitentScene(),
+    new MainScene() 
+]);
 
-Scenes.addScene(new MainScene())
+sceneManager.start();
 
-Scenes.start();
-
-setInterval(Scenes.update, 10);
+setInterval(() => {
+    sceneManager.update()
+}, 10);

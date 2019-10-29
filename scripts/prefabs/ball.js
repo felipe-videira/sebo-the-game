@@ -44,6 +44,7 @@ class Ball extends GameObject {
 
     _handleCollision (collision) {
         if (collision.onX) this._targetX = -this._speed;
+        
         if (collision.onY) this._targetY = -this._speed;
     }
 }

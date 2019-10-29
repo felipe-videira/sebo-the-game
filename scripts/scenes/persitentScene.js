@@ -5,8 +5,8 @@ class PersitentScene extends Scene {
         
         this.addMonoBehaviours([
             new EventEmitter(),
-            new UserInput(),
-            new CanvasHandler(),
+            new Input(),
+            new Canvas(),
         ])
     }
     

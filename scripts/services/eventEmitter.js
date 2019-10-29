@@ -2,6 +2,8 @@ class EventEmitter extends MonoBehaviour {
     _listeners = {}   
     
     constructor () {
+        super();
+
         if (!!EventEmitter.instance) {
             return EventEmitter.instance;
         }
@@ -11,32 +13,32 @@ class EventEmitter extends MonoBehaviour {
         return this;
     }
 
-    addListener (eventName, fn) {    
-        this._listeners[eventName] = this._listeners[eventName] || [];    
-        this._listeners[eventName].push(fn);    
+    static addListener (eventName, fn) {    
+        this.instance._listeners[eventName] = this.instance._listeners[eventName] || [];    
+        this.instance._listeners[eventName].push(fn);    
         return this;  
     }
 
-    on (eventName, fn) {    
+    static on (eventName, fn) {    
         return this.addListener(eventName, fn);  
     }
 
-    once (eventName, fn) {   
-        this._listeners[eventName] = this._listeners[eventName] || [];    
+    static once (eventName, fn) {   
+        this.instance._listeners[eventName] = this.instance._listeners[eventName] || [];    
         const onceWrapper = () => {      
             fn();      
             this.off(eventName, onceWrapper);    
         }   
-        this._listeners[eventName].push(onceWrapper);    
+        this.instance._listeners[eventName].push(onceWrapper);    
         return this; 
     }
 
-    off (eventName, fn) {    
+    static off (eventName, fn) {    
         return this.removeListener(eventName, fn);  
     }
 
-    removeListener (eventName, fn) {   
-        let lis = this._listeners[eventName];    
+    static removeListener (eventName, fn) {   
+        let lis = this.instance._listeners[eventName];    
         if (!lis) return this;    
         for (let i = lis.length; i > 0; i--) {      
             if (lis[i] === fn) {        
@@ -47,8 +49,8 @@ class EventEmitter extends MonoBehaviour {
         return this;  
     }
 
-    emit (eventName, ...args) {    
-        let fns = this._listeners[eventName];    
+    static emit (eventName, ...args) {    
+        let fns = this.instance._listeners[eventName];    
         if (!fns) return false;    
         fns.forEach((f) => {      
             f(...args);    
@@ -56,12 +58,12 @@ class EventEmitter extends MonoBehaviour {
         return true;  
     }
 
-    listenerCount (eventName) {    
-        let fns = this._listeners[eventName] || [];    
+    static listenerCount (eventName) {    
+        let fns = this.instance._listeners[eventName] || [];    
         return fns.length;  
     }
 
-    rawListeners (eventName) {    
-        return this._listeners[eventName];  
+    static rawListeners (eventName) {    
+        return this.instance._listeners[eventName];  
     }
 }

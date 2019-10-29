@@ -13,7 +13,7 @@ class SceneManager extends MonoBehaviour {
 
         SceneManager.instance = this;
 
-        this.addScenes(activeScenes);
+        SceneManager.addScenes(activeScenes);
         
         return this;
     }
@@ -40,24 +40,24 @@ class SceneManager extends MonoBehaviour {
         }
     }
 
-    addScenes (scenes) {
+    static addScenes (scenes) {
         for (const scene of scenes) {
             this.addScene(scene);
         }
     }
     
-    addScene (scene) {
-        this._validateScene(scene);
+    static addScene (scene) {
+        this.instance._validateScene(scene);
         
-        this._activeScenes[scene.name] = scene;
+        this.instance._activeScenes[scene.name] = scene;
 
-        if (this._started) this._activeScenes[scene.name].start();
+        if (this.instance._started) this.instance._activeScenes[scene.name].start();
     }
 
-    removeScene (sceneName) {
+    static removeScene (sceneName) {
         if (sceneName === 'PersitentScene') return false;
 
-        return delete this._activeScenes[sceneName];
+        return delete this.instance._activeScenes[sceneName];
     }
 
     _validateScene (v) {

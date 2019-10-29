@@ -26,7 +26,6 @@ class Scene extends MonoBehaviour {
 
     update () {
         super.update();
-
         for (const monoBehaviour of this._monoBehaviours) {
             monoBehaviour.update();
         }
@@ -34,7 +33,7 @@ class Scene extends MonoBehaviour {
 
     addMonoBehaviours (monoBehaviours = []) {
         for (const monoBehaviour of monoBehaviours) {
-            this.addGameObject(monoBehaviour)
+            this.addMonoBehaviour(monoBehaviour)
         }
     } 
 
