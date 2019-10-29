@@ -6,7 +6,7 @@ const Input = new UserInput()
 
 /* Game Objects */
 new Paddle();
-new Ball();
+// new Ball();
 
 
 /* Initializing */

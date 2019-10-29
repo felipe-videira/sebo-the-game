@@ -1,60 +1,47 @@
-class Ball extends MonoBehaviour {
+class Ball extends GameObject {
 
-    _color = "#0095DD";
-    _radius = 10;
-    _speed = 2;
-    _targetX;
-    _targetY;
-    _x;
-    _y;
+    _targetX = 1;
+    _targetY = -1;
+    _color;
+    _speed;
+    _radius;
 
     constructor ({ 
-        color = null, 
-        radius = null, 
-        speed = null 
+        color =  "#0095DD", 
+        radius = 10, 
+        speed = 2 
     } = {}) {
         super(); 
 
-        if (color) this._color = color;
-        if (radius) this._radius = radius;
-        if (speed) this._speed = speed;
+        this._color = color;
+        this._radius = radius;
+        this._speed = speed;
 
-        this._targetX = this._speed;
-        this._targetY = -this._speed;
+        this.addComponent(new CircleCollision(this, { radius }))
+        this.addComponent(new RigidBody(this))
     }
 
     start () {
-        this._x = Canvas.dimensions.width / 2;
-        this._y = Canvas.dimensions.height - 30;
+        this.getComponent('Rigidbody')
+            .setPosition(Canvas.dimensions.width / 2, Canvas.dimensions.height - 30)
+
+        this.getComponent("Collision").onCollision = this._handleCollision
     }
 
     update () {
         Canvas.createCircle({
-            x: this._x, 
-            y: this._y,  
+            x: this.transform.x, 
+            y: this.transform.y,  
             radius: this._radius, 
             color: this._color,
         });
         
-        this.move()
+        this.getComponent("Rigidbody").move(this._targetX, this._targetY, this._speed)
     }
 
-    move () {
-        if (
-            this._x + this._targetX > Canvas.dimensions.width - this._radius || 
-            this._x + this._targetX < this._radius
-        ) {
-            this._targetX = -this._targetX;
-        }
-    
-        if (
-            this._y + this._targetY > Canvas.dimensions.height - this._radius || 
-            this._y + this._targetY < this._radius
-        ) {
-            this._targetY = -this._targetY;
-        }
-    
-        this._x += this._targetX;
-        this._y += this._targetY; 
+    _handleCollision (collision) {
+        if (collision.onX) this._targetX = -this._speed;
+        if (collision.onY) this._targetY = -this._speed;
     }
 }
+ 

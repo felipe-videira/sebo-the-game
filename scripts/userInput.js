@@ -1,30 +1,41 @@
 class UserInput {
+    _validRightKeys = ["Right", "ArrowRight", "d", "KeyD"]
+    _validLeftKeys = ["Left", "ArrowLeft", "a", "KeyA"]
+    _validUpKeys = ["Up", "ArrowUp", "w", "KeyW"]
+    _validDownKeys = ["Down", "ArrowDown", "s", "KeyS"]
     _x = 0;
     _y = 0;
 
     constructor() {
-        document.addEventListener("keydown", this._keyDownHandler, false);
-        document.addEventListener("keyup", this._keyUpHandler, false);
+        document.addEventListener("keydown", e => this._keyDownHandler(e), false);
+        document.addEventListener("keyup", e => this._keyUpHandler(e), false);
+    }
+
+    get x () {
+        return this._x;
+    }
+
+    get y () {
+        return this._y;
     }
 
     _keyDownHandler (e) {
-        if (e.key == "Right" || e.key == "ArrowRight") {
-            this._x = 1;
-        } else if (e.key == "Left" || e.key == "ArrowLeft") {
-            this._x = -1;
-        }
-    }
+        if (this._validRightKeys.includes(e.key)) this._x = 1;
+        
+        if (this._validLeftKeys.includes(e.key)) this._x = -1;
 
+        if (this._validUpKeys.includes(e.key)) this._y = 1;
+
+        if (this._validDownKeys.includes(e.key)) this._y = -1;
+    }
+    
     _keyUpHandler (e) {
-        if ((e.key == "Right" || e.key == "ArrowRight") || (e.key == "Left" || e.key == "ArrowLeft")) {
+        if ([...this._validRightKeys, ...this._validLeftKeys].includes(e.key)) {
             this._x = 0;
         }
-    }
 
-    get values () {
-        return {
-            x: this._x,
-            y: this._y,
+        if ([...this._validUpKeys, ...this._validDownKeys].includes(e.key)) {
+            this._y = 0;
         }
     }
 }
