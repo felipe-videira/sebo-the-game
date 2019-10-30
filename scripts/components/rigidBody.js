@@ -12,21 +12,24 @@ class RigidBody extends Component {
         super();
         
         this._userRef = userRef;
-        
-        if (!this._userRef.transform) {
-            throw Error('You must have a transform in order to use RigidBody')
-        }
-
-        if (!this._userRef.getComponent("Collision")) {
-            throw Error('To use a rigidbody you must have a Collision attached!');
-        }
-
         this._mass = mass;
         this._useGravity = useGravity;
     }
 
     get name () {
         return "Rigidbody";
+    }
+
+    start () {
+        super.start();
+        
+        if (!this._userRef.transform) {
+            throw Error('To use a RigidBody you must have a transform!')
+        }
+
+        if (!this._userRef.getComponent("Collision")) {
+            throw Error('To use a RigidBody you must have a Collision attached!');
+        }
     }
 
     move (x, y, speed) {

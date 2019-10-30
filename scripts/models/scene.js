@@ -33,6 +33,7 @@ class Scene extends MonoBehaviour {
 
     addMonoBehaviours (monoBehaviours = []) {
         for (const monoBehaviour of monoBehaviours) {
+            console.log(monoBehaviour)
             this.addMonoBehaviour(monoBehaviour)
         }
     } 

@@ -8,10 +8,12 @@ class GameObject extends MonoBehaviour {
     _started = false;
     _name;
 
-    constructor (name) {
+    constructor (name, componentsOrCallback = null) {
         super();
         
         this._name = name;
+        
+        componentsOrCallback && this.addComponents(componentsOrCallback);
     }
 
     get name () {
@@ -48,14 +50,14 @@ class GameObject extends MonoBehaviour {
         }
     }
 
-    addComponents (components = []) {
-        for (const component of components) {
+    addComponents (componentsOrCallback) {
+        for (const component of this._validateComponents(componentsOrCallback)) {
             this.addComponent(component);
         }
     } 
 
-    addComponent (component = null) {
-        this._validateComponent(component);
+    addComponent (componentOrCallback) {
+        const component = this._validateComponent(componentOrCallback);
         
         this._components[component.name] = component;
 
@@ -67,8 +69,16 @@ class GameObject extends MonoBehaviour {
     }
 
     _validateComponent (v) {
+        if (v && typeof v === 'function') v = v(this);
+        
         if (!v || !v.isComponent) {
             throw Error("You are tring to add something that is not a Component!");
         }
+
+        return v;
+    }
+
+    _validateComponents (v) {
+        return Array.isArray(v) ? v : v(this);
     }
 }

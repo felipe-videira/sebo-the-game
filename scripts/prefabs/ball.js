@@ -1,11 +1,5 @@
 class Ball extends GameObject {
 
-    _targetX = 1;
-    _targetY = -1;
-    _color;
-    _speed;
-    _radius;
-
     constructor ({ 
         color =  "#0095DD", 
         radius = 10, 
@@ -13,39 +7,19 @@ class Ball extends GameObject {
     } = {}) {
         super("Ball"); 
 
-        this._color = color;
-        this._radius = radius;
-        this._speed = speed;
-
-        this.addComponent(new CircleCollision(this, { radius }))
-        this.addComponent(new RigidBody(this))
+        this.addComponents([
+            new Circle(this, { color, radius }),
+            new CircleCollision(this, { radius, collide: false }),
+            new RigidBody(this),
+            new Bounce(this, { speed })
+        ]);
     }
 
     start () {
         super.start();
 
-        this.getComponent('Rigidbody').setPosition(Canvas.dimensions.width / 2, Canvas.dimensions.height - 30)
-
-        this.getComponent("Collision").onCollision = this._handleCollision
-    }
-
-    update () {
-        super.update();
-        
-        Canvas.createCircle({
-            x: this.transform.x, 
-            y: this.transform.y,  
-            radius: this._radius, 
-            color: this._color,
-        });
-        
-        this.getComponent("Rigidbody").move(this._targetX, this._targetY, this._speed)
-    }
-
-    _handleCollision (collision) {
-        if (collision.onX) this._targetX = -this._speed;
-        
-        if (collision.onY) this._targetY = -this._speed;
+        this.getComponent('Rigidbody')
+            .setPosition(Canvas.dimensions.width / 2, Canvas.dimensions.height - 30);
     }
 }
  
