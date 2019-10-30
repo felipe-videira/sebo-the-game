@@ -1,4 +1,4 @@
-class PolygonCollision extends Collision {
+class PolygonCollider extends Collider {
     
     _userRef;
     _width;
@@ -18,7 +18,7 @@ class PolygonCollision extends Collision {
         super.start();
         
         if (!this._userRef.transform) {
-            throw Error('You must have a transform in order to use PolygonCollision')
+            throw Error('You must have a transform in order to use PolygonCollider')
         }
     }
 

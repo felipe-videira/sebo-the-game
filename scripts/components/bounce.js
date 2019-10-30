@@ -1,5 +1,6 @@
 class Bounce extends Component {
-
+    
+    _userRef;
     _speed;
     _x = 1;
     _y = -1;
@@ -31,7 +32,7 @@ class Bounce extends Component {
         }
 
         this._userRef.getComponent("Collision")
-            .setOnCollision(collision => this.onCollision(collision));
+            .subscribeOnCollision(collision => this.onCollision(collision));
 
         this._userRef.getComponent('Rigidbody')
             .setPosition(Canvas.dimensions.width / 2, Canvas.dimensions.width / 2);

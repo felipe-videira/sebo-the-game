@@ -1,4 +1,5 @@
 class EventEmitter extends MonoBehaviour {  
+    
     _listeners = {}   
     
     constructor () {
@@ -11,6 +12,10 @@ class EventEmitter extends MonoBehaviour {
         EventEmitter.instance = this;
 
         return this;
+    }
+
+    get name () {
+        return "EventEmitter";
     }
 
     static addListener (eventName, fn) {    

@@ -1,17 +1,35 @@
 class Ball extends GameObject {
 
-    constructor ({ 
+    _initialPosition;
+    _radius;
+
+    constructor (name = "Ball", { 
         color =  "#0095DD", 
         radius = 10, 
-        speed = 2 
+        speed = 2,
+        initialPosition = {
+            x: Canvas.dimensions.width / 2,
+            y: Canvas.dimensions.height - 30
+        }  
     } = {}) {
-        super("Ball"); 
+        super(name); 
+
+        this._initialPosition = initialPosition;
+        this._radius = radius;
 
         this.addComponents([
-            new Circle(this, { color, radius }),
-            new CircleCollision(this, { radius, collide: false }),
-            new RigidBody(this),
-            new Bounce(this, { speed })
+            new Circle(this, { 
+                color, 
+                radius 
+            }),
+            new CircleCollider(this, { 
+                radius, 
+                collide: false 
+            }),
+            new Rigidbody(this),
+            new Bounce(this, { 
+                speed 
+            })
         ]);
     }
 
@@ -19,7 +37,13 @@ class Ball extends GameObject {
         super.start();
 
         this.getComponent('Rigidbody')
-            .setPosition(Canvas.dimensions.width / 2, Canvas.dimensions.height - 30);
+            .setPosition(this._initialPosition.x, this._initialPosition.y);
+    }
+
+    update () {
+        if (this.transform.y > Canvas.dimensions.height - this._radius) {
+            EventEmmiter.emmit(EVENT.BALL_BEYOND_LIMITS);
+        }
     }
 }
  

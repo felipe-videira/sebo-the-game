@@ -4,14 +4,20 @@ class MainScene extends Scene {
         super();
         
         this.addMonoBehaviours([
-            new Ball(),
-            new Paddle(),
-            new GameObject("Ball", ref => [
-                new Circle(ref, { color: "red", radius: 10 }),
-                new CircleCollision(ref, { radius: 10, collide: false }),
-                new RigidBody(ref),
-                new Bounce(ref, { speed: 2 })
-            ])
+            new GameManager(),
+            new Ball("Ball1"),
+            new Ball("Ball2", { 
+                color: PLAYER_TWO_COLOR,
+                initialPosition: {
+                    x: Canvas.dimensions.width / 2,
+                    y: Canvas.dimensions.height - 10
+                },
+            }),
+            new Paddle("P1Paddle"),
+            new Paddle("P2Paddle", { 
+                color: PLAYER_TWO_COLOR, 
+                input: gameConfig.inputs.p2 
+            }),
         ])
     }
     

@@ -1,5 +1,6 @@
 class Circle extends Component {
     
+    _userRef;
     _color;
     _radius;
 

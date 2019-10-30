@@ -1,4 +1,4 @@
-class CircleCollision extends Collision {
+class CircleCollider extends Collider {
     
     _userRef;
     _radius;
@@ -16,7 +16,7 @@ class CircleCollision extends Collision {
         super.start();
         
         if (!this._userRef.transform) {
-            throw Error('You must have a transform in order to use CircleCollision')
+            throw Error('You must have a transform in order to use CircleCollider')
         }
     }
 

@@ -2,7 +2,9 @@
 class SceneManager extends MonoBehaviour {
     
     _started = false;
-    _activeScenes = {};
+    _activeScenes = {
+        PersitentScene: new PersitentScene()
+    };
 
     constructor (activeScenes = []) {
         super();
@@ -16,6 +18,10 @@ class SceneManager extends MonoBehaviour {
         SceneManager.addScenes(activeScenes);
         
         return this;
+    }
+
+    get name () {
+        return "SceneManager";
     }
 
     get activeScenes () {
@@ -55,7 +61,7 @@ class SceneManager extends MonoBehaviour {
     }
 
     static removeScene (sceneName) {
-        if (sceneName === 'PersitentScene') return false;
+        if (FORBIDDEN_SCENE_NAMES.includes(sceneName)) return false;
 
         return delete this.instance._activeScenes[sceneName];
     }
@@ -63,6 +69,10 @@ class SceneManager extends MonoBehaviour {
     _validateScene (v) {
         if (!v || !v.isScene) {
             throw Error("You are tring to add something that is not a Scene!");
+        }
+        
+        if (FORBIDDEN_SCENE_NAMES.includes(v.name)) {
+            throw Error("Invalid scene name!");
         }
     }
 

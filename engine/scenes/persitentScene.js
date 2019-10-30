@@ -7,6 +7,7 @@ class PersitentScene extends Scene {
             new EventEmitter(),
             new Input(),
             new Canvas(),
+            new Collision()
         ])
     }
     

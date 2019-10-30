@@ -1,4 +1,4 @@
-class RigidBody extends Component {
+class Rigidbody extends Component {
     
     _collision;
     _userRef
@@ -8,7 +8,10 @@ class RigidBody extends Component {
     _mass;
     _useGravity;
 
-    constructor(userRef, { mass = 10, useGravity = false } = {}) {
+    constructor(userRef, { 
+        mass = 10, 
+        useGravity = false, 
+    } = {}) {
         super();
         
         this._userRef = userRef;
@@ -24,11 +27,11 @@ class RigidBody extends Component {
         super.start();
         
         if (!this._userRef.transform) {
-            throw Error('To use a RigidBody you must have a transform!')
+            throw Error('To use a Rigidbody you must have a transform!')
         }
 
-        if (!this._userRef.getComponent("Collision")) {
-            throw Error('To use a RigidBody you must have a Collision attached!');
+        if (!this._userRef.getComponent("Collider")) {
+            throw Error('To use a Rigidbody you must have a Collider attached!');
         }
     }
 

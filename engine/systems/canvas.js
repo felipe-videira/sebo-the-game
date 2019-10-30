@@ -1,4 +1,5 @@
 class Canvas extends MonoBehaviour {
+    
     _mainCanvas;
     _ctx;
     
@@ -15,6 +16,10 @@ class Canvas extends MonoBehaviour {
         this._ctx = mainCanvas.getContext("2d");
 
         return this;
+    }
+
+    get name () {
+        return "Canvas";
     }
 
     update () {

@@ -4,11 +4,12 @@ class GameObject extends MonoBehaviour {
         x: 0,
         y: 0
     };
+    
     _components = {};
     _started = false;
     _name;
 
-    constructor (name, componentsOrCallback = null) {
+    constructor (name = '', componentsOrCallback = null) {
         super();
         
         this._name = name;
@@ -17,7 +18,9 @@ class GameObject extends MonoBehaviour {
     }
 
     get name () {
-        return this._name;
+        if (this._name) return this._name;
+
+        throw Error("This Scene does not have a name!");
     }
 
     get isGameObject () {
