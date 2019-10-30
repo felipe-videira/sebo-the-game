@@ -1,6 +1,5 @@
 class PolygonCollider extends Collider {
     
-    _userRef;
     _width;
     _height;
     _collide;
@@ -8,7 +7,6 @@ class PolygonCollider extends Collider {
     constructor (userRef, { width = 10, height = 10, collide = true  } = {}) {
         super(userRef)
 
-        this._userRef = userRef
         this._width = width;
         this._height = height;
         this._collide = collide;
@@ -22,16 +20,18 @@ class PolygonCollider extends Collider {
         }
     }
 
-    detectCollision () {
+    detectCollision (xAxis = [], yAxis = []) {
         let collided = false;
         let onX = false;
         let onY = false;
 
-        if (this._userRef.transform.x + this._width > Canvas.dimensions.width) {
-            if (this._collide) this._userRef.transform.x = Canvas.dimensions.width - this._width;
-            
-            collided = true;
-            onX = true;
+        for (const x of xAxis) {
+            if (this._userRef.transform.x + this._width > x) {
+                if (this._collide) this._userRef.transform.x = x - this._width;
+                
+                collided = true;
+                onX = true;
+            }
         }
 
         if (this._userRef.transform.x < 0) {
@@ -40,12 +40,14 @@ class PolygonCollider extends Collider {
             collided = true;
             onX = true;
         }
-        
-        if (this._userRef.transform.y + this._height > Canvas.dimensions.height) {
-            if (this._collide) this._userRef.transform.y = Canvas.dimensions.height - this._height;
 
-            collided = true;
-            onY = true;
+        for (const y of yAxis) {
+            if (this._userRef.transform.y + this._height > y) {
+                if (this._collide) this._userRef.transform.y = y - this._height;
+    
+                collided = true;
+                onY = true;
+            }
         }
 
         if (this._userRef.transform.y < 0) {

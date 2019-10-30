@@ -1,6 +1,4 @@
-const sceneManager = new SceneManager([ 
-    new PersitentScene(),
-]);
+const sceneManager = new SceneManager(new PersitentScene());
 
 sceneManager.start();
 

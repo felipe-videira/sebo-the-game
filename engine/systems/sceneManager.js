@@ -2,11 +2,9 @@
 class SceneManager extends MonoBehaviour {
     
     _started = false;
-    _activeScenes = {
-        PersitentScene: new PersitentScene()
-    };
+    _activeScenes = {};
 
-    constructor (activeScenes = []) {
+    constructor (activeScene) {
         super();
 
         if (!!SceneManager.instance) {
@@ -15,7 +13,7 @@ class SceneManager extends MonoBehaviour {
 
         SceneManager.instance = this;
 
-        SceneManager.addScenes(activeScenes);
+        this._addScene(activeScene);
         
         return this;
     }
@@ -33,6 +31,8 @@ class SceneManager extends MonoBehaviour {
     } 
 
     start () {
+        super.start();
+
         for (const sceneName in this._activeScenes) {
             this._activeScenes[sceneName].start();
         }
@@ -41,6 +41,8 @@ class SceneManager extends MonoBehaviour {
     }
 
     update () {
+        super.update();
+
         for (const sceneName in this._activeScenes) {
             this._activeScenes[sceneName].update();
         }
@@ -60,18 +62,26 @@ class SceneManager extends MonoBehaviour {
         if (this.instance._started) this.instance._activeScenes[scene.name].start();
     }
 
+    _addScene (scene) {
+        this._validateScene(scene, false);
+        
+        this._activeScenes[scene.name] = scene;
+
+        if (this._started) this._activeScenes[scene.name].start();
+    }
+
     static removeScene (sceneName) {
         if (FORBIDDEN_SCENE_NAMES.includes(sceneName)) return false;
 
         return delete this.instance._activeScenes[sceneName];
     }
 
-    _validateScene (v) {
+    _validateScene (v, checkName = true) {
         if (!v || !v.isScene) {
             throw Error("You are tring to add something that is not a Scene!");
         }
         
-        if (FORBIDDEN_SCENE_NAMES.includes(v.name)) {
+        if (checkName && FORBIDDEN_SCENE_NAMES.includes(v.name)) {
             throw Error("Invalid scene name!");
         }
     }

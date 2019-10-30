@@ -9,7 +9,7 @@ class Ball extends GameObject {
         speed = 2,
         initialPosition = {
             x: Canvas.dimensions.width / 2,
-            y: Canvas.dimensions.height - 30
+            y: Canvas.dimensions.height - 10
         }  
     } = {}) {
         super(name); 
@@ -42,7 +42,7 @@ class Ball extends GameObject {
 
     update () {
         if (this.transform.y > Canvas.dimensions.height - this._radius) {
-            EventEmmiter.emmit(EVENT.BALL_BEYOND_LIMITS);
+            // EventEmitter.emit(EVENT.BALL_BEYOND_LIMITS);
         }
     }
 }

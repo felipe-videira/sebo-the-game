@@ -1,7 +1,11 @@
 class GameManager extends MonoBehaviour {
     
+    get name () {
+        return "GameManager";
+    }
+
     start () {
-        EventEmmiter.on(EVENT.BALL_BEYOND_LIMITS, () => this.gameOver())
+        EventEmitter.on(EVENT.BALL_BEYOND_LIMITS, () => this.gameOver());
     }
 
     gameOver () {

@@ -23,15 +23,15 @@ class Bounce extends Component {
             throw Error('To use a Bounce you must have a transform!');
         }
 
-        if (!this._userRef.getComponent("Collision")) {
-            throw Error('To use a Bounce you must have a Collision attached!');
+        if (!this._userRef.getComponent("Collider")) {
+            throw Error('To use a Bounce you must have a Collider attached!');
         }
 
         if (!this._userRef.getComponent("Rigidbody")) {
             throw Error('To use a Bounce you must have a Rigidbody attached!');
         }
 
-        this._userRef.getComponent("Collision")
+        this._userRef.getComponent("Collider")
             .subscribeOnCollision(collision => this.onCollision(collision));
 
         this._userRef.getComponent('Rigidbody')

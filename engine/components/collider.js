@@ -9,17 +9,27 @@ class Collider extends Component {
         this._userRef = userRef;
     }
 
+    get isCollider () {
+        return true;
+    }
+
     get name () {
         return "Collider";
     }
 
-    update () {
-        super.update();
-
-        this.detectCollision();
+    get x () {
+        return this._userRef.transform.x;
     }
 
-    detectCollision () {
+    get y () {
+        return this._userRef.transform.y;
+    }
+
+    start () {
+        Collision.subscribeCollider(this);
+    }
+
+    detectCollision (xAxis = [], yAxis = []) {
         throw Error("The method detectCollision must be implemented!");
     }
     
