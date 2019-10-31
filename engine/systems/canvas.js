@@ -70,7 +70,7 @@ class Canvas extends MonoBehaviour {
         }
 
         this.instance._ctx.beginPath();
-        this.instance._ctx.rect(x, y, height, width);
+        this.instance._ctx.rect(x, y, width, height);
         this.instance._ctx.fillStyle = color;
         this.instance._ctx.fill();
 

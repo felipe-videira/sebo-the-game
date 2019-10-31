@@ -35,24 +35,22 @@ class PolygonCollider extends Collider {
 
         if (other) {
             if (
-                this.x < other.x + other.xMeasureUnit &&
-                this.x + this._width > other.x &&
-                this.y < other.y + other.yMeasureUnit &&
-                this.y + this._height > other.y
+                this.x <= other.x + other.xMeasureUnit &&
+                this.x + this._width >= other.x &&
+                this.y <= other.y + other.yMeasureUnit &&
+                this.y + this._height >= other.y
             ) {
                 collided = true;
-                onX = other.x + other.xMeasureUnit !== this.x + this._width;
-                onY = other.y + other.yMeasureUnit !== this.y + this._height;
-                
+
                 if (this._collide) {
-                    if (onX) this._userRef.transform.x = other.xMeasureUnit - this._width;
-                    if (onY) this._userRef.transform.y = other.yMeasureUnit - this._height;
+                    // this._userRef.transform.x = this._userRef.transform.x;
+                    // this._userRef.transform.y = this._userRef.transform.y;
                 }
             }
         }
 
         if (this.x + this._width > Canvas.dimensions.width) {
-            if (this._collide) this._userRef.transform.x = x - this._width;
+            if (this._collide) this._userRef.transform.x = Canvas.dimensions.width - this._width;
             
             collided = true;
             onX = true;
@@ -66,7 +64,7 @@ class PolygonCollider extends Collider {
         }
 
         if (this.y + this._height > Canvas.dimensions.height) {
-            if (this._collide) this._userRef.transform.y = y - this._height;
+            if (this._collide) this._userRef.transform.y = Canvas.dimensions.height - this._height;
 
             collided = true;
             onY = true;

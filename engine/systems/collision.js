@@ -26,12 +26,23 @@ class Collision extends MonoBehaviour {
 
     _checkCollisions () {
         if (Object.keys(this._colliders).length <= 1) return;
+        
+        const collisionsAlreadyChecked = {}
 
         for (const keyA in this._colliders) {
+            if (!collisionsAlreadyChecked[keyA]) collisionsAlreadyChecked[keyA] = {};
+            
             for (const keyB in this._colliders) {
-                if (keyA === keyB) continue;
+                if (!collisionsAlreadyChecked[keyB]) collisionsAlreadyChecked[keyB] = {};
+
+                if (keyA === keyB || collisionsAlreadyChecked[keyA][keyB]) {
+                    continue;
+                } 
                 
                 this._colliders[keyA].detectCollision(this._colliders[keyB]);
+                
+                collisionsAlreadyChecked[keyA][keyB] = 1;
+                collisionsAlreadyChecked[keyB][keyA] = 1;
             } 
         } 
     }
