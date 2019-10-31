@@ -1,6 +1,6 @@
 class Collision extends MonoBehaviour {
     
-    _colliders = [];
+    _colliders = {};
 
     constructor () {
         super();
@@ -20,22 +20,26 @@ class Collision extends MonoBehaviour {
 
     update () {
         super.update();
-        
-        for (const collA of this._colliders) {
-            for (const collB of this._colliders) {
-                collA.detectCollision([
-                    Canvas.dimensions.width, 
-                    collB.x
-                ], [
-                    Canvas.dimensions.height,
-                    collB.y
-                ])
+
+        this._checkCollisions();
+    }
+
+    _checkCollisions () {
+        if (Object.keys(this._colliders).length <= 1) return;
+
+        for (const keyA in this._colliders) {
+            for (const keyB in this._colliders) {
+                if (keyA === keyB) continue;
+                
+                this._colliders[keyA].detectCollision(this._colliders[keyB]);
             } 
         } 
     }
 
-    static subscribeCollider (collider) {
-        this.instance._colliders.push(this.instance._validateCollider(collider));
+    static subscribeCollider (v) {
+        const collider = this.instance._validateCollider(v);
+
+        this.instance._colliders[collider.uuid] = collider;
     }
 
     _validateCollider (v) {

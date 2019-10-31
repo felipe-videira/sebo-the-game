@@ -9,11 +9,18 @@ class GameObject extends MonoBehaviour {
     _started = false;
     _name;
 
-    constructor (name = '', componentsOrCallback = null) {
+    constructor (
+        name = '', 
+        { x = 0, y = 0 } = {},
+        componentsOrCallback = null, 
+    ) {
         super();
-        
+
         this._name = name;
-        
+
+        this.transform.x = x;
+        this.transform.y = y;
+
         componentsOrCallback && this.addComponents(componentsOrCallback);
     }
 

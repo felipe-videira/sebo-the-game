@@ -5,31 +5,19 @@ class MainScene extends Scene {
         
         this.addMonoBehaviours([
             new GameManager(),
-            new Ball("Ball1"),
-            new Ball("Ball2", { 
-                color: PLAYER_TWO_COLOR,
-                initialPosition: {
-                    x: (Canvas.dimensions.width - 5) / 2,
-                    y: Canvas.dimensions.height - 5
-                },
-            }),
-            new Paddle("P1Paddle", {
+            new Player("P1", {
+                x: (Canvas.dimensions.width / 2) - (Canvas.dimensions.width / 4),
+                y: Canvas.dimensions.height / 2,
                 width: 10,
                 height: 75,
-                initialPosition: {
-                    x: (Canvas.dimensions.width - 5) / 2,
-                    y: Canvas.dimensions.height - 75
-                },
             }),
-            new Paddle("P2Paddle", { 
+            new Player("P2", { 
+                x: (Canvas.dimensions.width / 2) + (Canvas.dimensions.width / 4),
+                y: Canvas.dimensions.height / 2,
                 width: 10,
                 height: 75,
                 color: PLAYER_TWO_COLOR, 
                 input: gameConfig.inputs.p2, 
-                initialPosition: {
-                    x: (Canvas.dimensions.width - 15) / 2,
-                    y: Canvas.dimensions.height - 75
-                },
             }),
         ])
     }

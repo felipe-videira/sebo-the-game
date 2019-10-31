@@ -27,8 +27,8 @@ class Polygon extends Component {
     }
 
     update () {
-        super.update();
-
+        super.update(); 
+        
         Canvas.createPolygon({
             x: this._userRef.transform.x,
             y: this._userRef.transform.y,
