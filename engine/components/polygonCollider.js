@@ -3,6 +3,8 @@ class PolygonCollider extends Collider {
     _width;
     _height;
     _collide;
+    _previousX;
+    _previousY;
 
     constructor (userRef, { width = 10, height = 10, collide = true  } = {}) {
         super(userRef)
@@ -28,12 +30,17 @@ class PolygonCollider extends Collider {
         }
     }
 
-    detectCollision (other = null) {
-        let collided = false;
-        let onX = false;
-        let onY = false;
+    update () {
+        super.update();
+        
+        this._previousX = this._userRef.transform.x;
+        this._previousY = this._userRef.transform.y;
+    }
 
-        if (other) {
+    detectCollision () {
+        let collided = false;
+
+        Collision.checkCollisions(this, other => {
             if (
                 this.x <= other.x + other.xMeasureUnit &&
                 this.x + this._width >= other.x &&
@@ -42,41 +49,47 @@ class PolygonCollider extends Collider {
             ) {
                 collided = true;
 
-                if (this._collide) {
-                    // this._userRef.transform.x = this._userRef.transform.x;
-                    // this._userRef.transform.y = this._userRef.transform.y;
-                }
+                if (!this._collide) return;
+
+                this._userRef.transform.x = this._previousX;
+                this._userRef.transform.y = this._previousY;
             }
-        }
+        })
 
         if (this.x + this._width > Canvas.dimensions.width) {
-            if (this._collide) this._userRef.transform.x = Canvas.dimensions.width - this._width;
+            if (this._collide) {
+                this._userRef.transform.x = Canvas.dimensions.width - this._width;
+            }
             
             collided = true;
-            onX = true;
         }
 
         if (this.x < 0) {
-            if (this._collide) this._userRef.transform.x = 0;
+            if (this._collide) {
+                this._userRef.transform.x = 0;
+            }
 
             collided = true;
-            onX = true;
         }
 
         if (this.y + this._height > Canvas.dimensions.height) {
-            if (this._collide) this._userRef.transform.y = Canvas.dimensions.height - this._height;
+            if (this._collide) {
+                this._userRef.transform.y = Canvas.dimensions.height - this._height;
+            }
 
             collided = true;
-            onY = true;
         }
 
         if (this.y < 0) {
-            if (this._collide) this._userRef.transform.y = 0;
+            if (this._collide) {
+                this._userRef.transform.y = 0;
+            }
 
             collided = true;
-            onY = true;
         }
 
-        if (collided) this.onCollision({ onX, onY })
+        if (collided) this.onCollision()
+
+        return collided;
     }
 }

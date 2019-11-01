@@ -18,32 +18,13 @@ class Collision extends MonoBehaviour {
         return "Collision";
     }
 
-    update () {
-        super.update();
-
-        this._checkCollisions();
-    }
-
-    _checkCollisions () {
-        if (Object.keys(this._colliders).length <= 1) return;
+    static checkCollisions (collider, callback) {
+        if (Object.keys(this.instance._colliders).length <= 1) return;
         
-        const collisionsAlreadyChecked = {}
+        for (const key in this.instance._colliders) {
+            if (key === collider.uuid) continue;
 
-        for (const keyA in this._colliders) {
-            if (!collisionsAlreadyChecked[keyA]) collisionsAlreadyChecked[keyA] = {};
-            
-            for (const keyB in this._colliders) {
-                if (!collisionsAlreadyChecked[keyB]) collisionsAlreadyChecked[keyB] = {};
-
-                if (keyA === keyB || collisionsAlreadyChecked[keyA][keyB]) {
-                    continue;
-                } 
-                
-                this._colliders[keyA].detectCollision(this._colliders[keyB]);
-                
-                collisionsAlreadyChecked[keyA][keyB] = 1;
-                collisionsAlreadyChecked[keyB][keyA] = 1;
-            } 
+            callback(this.instance._colliders[key]);
         } 
     }
 

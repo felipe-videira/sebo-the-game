@@ -63,9 +63,9 @@ class Collider extends Component {
         this._onCollision.push(callback);
     }
 
-    onCollision ({ onX = false, onY = false } = {}) {
+    onCollision () {
         for (const callback of this._onCollision) {
-            callback({ onX, onY });
+            callback();
         }
     }
 
