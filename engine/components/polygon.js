@@ -32,6 +32,7 @@ class Polygon extends Component {
         Canvas.createPolygon({
             x: this._userRef.transform.x,
             y: this._userRef.transform.y,
+            rotation: this._userRef.transform.rotation,
             color: this._color,
             width: this._width,
             height: this._height

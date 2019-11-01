@@ -6,13 +6,14 @@ class Player extends GameObject {
     constructor (name = "Paddle", { 
         x = 0,
         y = 0,
-        color = "#0095DD", 
+        rotation = 0,
+        color = "#000", 
         speed = 7, 
         width = 10,
         height = 75,
         input = gameConfig.inputs.p1
     } = {}) {
-        super(name, { x, y }); 
+        super(name, { x, y, rotation }); 
 
         this._width = width;
         this._height = height;

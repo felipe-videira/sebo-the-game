@@ -49,7 +49,73 @@ class Canvas extends MonoBehaviour {
         }
     }
     
-    static createPolygon ({ 
+    static createCircle ({ 
+        x = null, 
+        y = null, 
+        radius = 10, 
+        startAngle = 0, 
+        endAngle = Math.PI * 2, 
+        color = "#000",
+        antiClockwise = null,
+        borderColor = null,
+    } = {}) {
+        if (!x && !y) {
+            x = this.center.x
+            y = this.center.y
+        }
+
+        this.instance._ctx.beginPath();
+        this.instance._ctx.arc(x, y, radius, startAngle, endAngle, antiClockwise);
+        this.instance._ctx.fillStyle = color;
+        this.instance._ctx.fill();
+
+        if (borderColor) {
+            this.instance._ctx.strokeStyle  = borderColor;
+            this.instance._ctx.stroke();
+        }
+
+        this.instance._ctx.closePath();
+    };
+
+    static createPolygon ({
+        x = null, 
+        y = null, 
+        width = 10, 
+        height = 10,
+        size = null,
+        color = "#000",
+        borderColor = null,
+        rotation = 0
+    } = {}) {
+        if (!x && !y) {
+            x = this.center.x
+            y = this.center.y
+        }
+
+        if (size) {
+            width = size
+            height = size
+        }
+
+        this.instance._ctx.save();
+        this.instance._ctx.beginPath();
+
+        this.instance._ctx.translate(x + width / 2, y + height / 2);
+        this.instance._ctx.rotate(rotation * Math.PI / 180);
+        this.instance._ctx.rect(-width / 2, -height / 2, width, height);
+
+        this.instance._ctx.fillStyle = color;
+        this.instance._ctx.fill();
+
+        if (borderColor) {
+            this.instance._ctx.strokeStyle  = borderColor;
+            this.instance._ctx.stroke();
+        }
+
+        this.instance._ctx.restore();
+    }
+
+    static createPolygon_LEGACY ({ 
         x = null, 
         y = null, 
         width = 10, 
@@ -71,34 +137,6 @@ class Canvas extends MonoBehaviour {
 
         this.instance._ctx.beginPath();
         this.instance._ctx.rect(x, y, width, height);
-        this.instance._ctx.fillStyle = color;
-        this.instance._ctx.fill();
-
-        if (borderColor) {
-            this.instance._ctx.strokeStyle  = borderColor;
-            this.instance._ctx.stroke();
-        }
-
-        this.instance._ctx.closePath();
-    };
-    
-    static createCircle ({ 
-        x = null, 
-        y = null, 
-        radius = 10, 
-        startAngle = 0, 
-        endAngle = Math.PI * 2, 
-        color = "#000",
-        antiClockwise = null,
-        borderColor = null,
-    } = {}) {
-        if (!x && !y) {
-            x = this.center.x
-            y = this.center.y
-        }
-
-        this.instance._ctx.beginPath();
-        this.instance._ctx.arc(x, y, radius, startAngle, endAngle, antiClockwise);
         this.instance._ctx.fillStyle = color;
         this.instance._ctx.fill();
 

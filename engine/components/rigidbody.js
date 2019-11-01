@@ -35,18 +35,20 @@ class Rigidbody extends Component {
         }
     }
 
-    move (x, y, speed) {
-        if (!x && !y) return;
+    move (x, y, speed, rotation, rotationSpeed) {
+        if (!x && !y && !rotation) return;
 
         this._userRef.transform.x += speed * x;
         this._userRef.transform.y += speed * y;
-
+        this._userRef.transform.rotation += rotationSpeed * rotation;
+        
         this._userRef.getComponent("Collider").detectCollision();
     }
-
-    setPosition (x, y) {
+    
+    setPosition (x, y, rotation) {
         this._userRef.transform.x = x;
         this._userRef.transform.y = y;
+        this._userRef.transform.rotation = rotation;
 
         this._userRef.getComponent("Collider").detectCollision();
     }

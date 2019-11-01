@@ -2,9 +2,14 @@ class CharacterController extends Component {
     
     _userRef;
     _speed;
+    _rotationSpeed;
     _input;
     
-    constructor (userRef, { input, speed = 2 } = {}) {
+    constructor (userRef, { 
+        input, 
+        speed = 2, 
+        rotationSpeed = 2 
+    } = {}) {
         super(); 
 
         if (!isInput(input)) {
@@ -14,6 +19,7 @@ class CharacterController extends Component {
         this._userRef = userRef;
         this._input = input;
         this._speed = speed;
+        this._rotationSpeed = rotationSpeed;
     }
 
     get name () {
@@ -29,9 +35,16 @@ class CharacterController extends Component {
     }
 
     update () {
-        super.update();
+        super.update(); 
 
         this._userRef.getComponent('Rigidbody')
-            .move(Input.values[this._input].x, Input.values[this._input].y * -1, this._speed);
+            .move(
+                Input.values[this._input].x, 
+                Input.values[this._input].y * -1, 
+                this._speed,
+                Input.values[this._input].rotation,
+                this._rotationSpeed,
+            );
+
     }
 }

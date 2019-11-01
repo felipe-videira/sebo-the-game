@@ -2,7 +2,8 @@ class GameObject extends MonoBehaviour {
     
     transform = {
         x: 0,
-        y: 0
+        y: 0,
+        rotation: 0
     };
     
     _components = {};
@@ -11,7 +12,11 @@ class GameObject extends MonoBehaviour {
 
     constructor (
         name = '', 
-        { x = 0, y = 0 } = {},
+        { 
+            x = 0, 
+            y = 0, 
+            rotation = 0 
+        } = {},
         componentsOrCallback = null, 
     ) {
         super();
@@ -20,6 +25,7 @@ class GameObject extends MonoBehaviour {
 
         this.transform.x = x;
         this.transform.y = y;
+        this.transform.rotation = rotation;
 
         componentsOrCallback && this.addComponents(componentsOrCallback);
     }

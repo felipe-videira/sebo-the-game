@@ -18,6 +18,7 @@ class Input extends MonoBehaviour {
             this._input[gameConfig.inputs[key]] = {
                 x: 0,
                 y: 0,
+                rotation: 0
             }
         }
         
@@ -56,5 +57,11 @@ class Input extends MonoBehaviour {
             
         if (gameConfig.inputKeys[input].down.includes(key)) 
             this._input[input].y = !isNullOrEmpty(valueToSet) ? valueToSet : -1;
+    
+        if (gameConfig.inputKeys[input].rotateUp.includes(key)) 
+            this._input[input].rotation = !isNullOrEmpty(valueToSet) ? valueToSet : 1;
+
+        if (gameConfig.inputKeys[input].rotateDown.includes(key)) 
+            this._input[input].rotation = !isNullOrEmpty(valueToSet) ? valueToSet : -1;
     }
 }

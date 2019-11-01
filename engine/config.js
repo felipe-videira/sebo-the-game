@@ -8,13 +8,17 @@ const gameConfig = {
             "right": ["Right", "ArrowRight"],
             "left": ["Left", "ArrowLeft"],
             "up": ["Up", "ArrowUp"],
-            "down": ["Down", "ArrowDown"]
+            "down": ["Down", "ArrowDown"],
+            "rotateUp": ["1", "Numpad1"],
+            "rotateDown": ["2", "Numpad2"],
         },
         "p2": {
             "right": ["d", "KeyD"],
             "left": ["a", "KeyA"],
             "up": ["w", "KeyW"],
-            "down": ["s", "KeyS"]
+            "down": ["s", "KeyS"],
+            "rotateUp": ["c", "KeyC"],
+            "rotateDown": ["v", "KeyV"],
         } 
     }
 }
