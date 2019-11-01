@@ -31,6 +31,10 @@ class Collider extends Component {
         return this._userRef.transform.y;
     }
 
+    get rotation () {
+        return this._userRef.transform.rotation;
+    }
+
     get xMeasureUnit () {
         throw Error("The getter xMeasureUnit must be implemented!");
     }

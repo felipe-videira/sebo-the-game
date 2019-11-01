@@ -15,3 +15,5 @@ const uuidv4 = () => {
         return (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16);
     });
 }
+
+const degToRad = deg => deg * Math.PI / 180;

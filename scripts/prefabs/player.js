@@ -9,6 +9,7 @@ class Player extends GameObject {
         rotation = 0,
         color = "#000", 
         speed = 7, 
+        rotationSpeed = 2,
         width = 10,
         height = 75,
         input = gameConfig.inputs.p1
@@ -31,6 +32,7 @@ class Player extends GameObject {
             new Rigidbody(this),
             new CharacterController(this, { 
                 speed, 
+                rotationSpeed,
                 input 
             })
         ])

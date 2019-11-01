@@ -40,6 +40,7 @@ class PolygonCollider extends Collider {
     detectCollision () {
         let collided = false;
 
+        
         Collision.checkCollisions(this, other => {
             if (
                 this.x <= other.x + other.xMeasureUnit &&

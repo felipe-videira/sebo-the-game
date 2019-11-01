@@ -101,7 +101,7 @@ class Canvas extends MonoBehaviour {
         this.instance._ctx.beginPath();
 
         this.instance._ctx.translate(x + width / 2, y + height / 2);
-        this.instance._ctx.rotate(rotation * Math.PI / 180);
+        this.instance._ctx.rotate(degToRad(rotation));
         this.instance._ctx.rect(-width / 2, -height / 2, width, height);
 
         this.instance._ctx.fillStyle = color;

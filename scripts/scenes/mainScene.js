@@ -1,13 +1,13 @@
 class MainScene extends Scene {
 
-    _p1X = (Canvas.dimensions.width / 2) - (Canvas.dimensions.width / 4);
+    _p1X = (Canvas.dimensions.width / 2) + (Canvas.dimensions.width / 4);
     _p1Y = Canvas.dimensions.height / 2;
-    _p2X = (Canvas.dimensions.width / 2) + (Canvas.dimensions.width / 4);
+    _p2X = (Canvas.dimensions.width / 2) - (Canvas.dimensions.width / 4);
     _p2Y = Canvas.dimensions.height / 2;
-    _p1Color = "#fff"; //"#0095DD";
-    _p2Color = "#fff"; //"#e04343";
-    _pSpeed = 5;
-    _pRotationSpeed = 12;
+    _p1Color = "#0095DD";
+    _p2Color = "#e04343";
+    _pSpeed = 2
+    _pRotationSpeed = 4;
     _pWidth = 75;
     _pHeight = 10;
 
