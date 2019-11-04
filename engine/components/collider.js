@@ -7,7 +7,7 @@ class Collider extends Component {
     constructor (userRef) {
         super();
         
-        this._uuid = uuidv4();
+        this._uuid = uuid4();
         this._userRef = userRef;
     }
 

@@ -50,101 +50,98 @@ class Canvas extends MonoBehaviour {
     }
     
     static createCircle ({ 
-        x = null, 
-        y = null, 
+        x = this.center.x,
+        y = this.center.y,
         radius = 10, 
         startAngle = 0, 
         endAngle = Math.PI * 2, 
         color = "#000",
         antiClockwise = null,
         borderColor = null,
+        borderWidth = 0
     } = {}) {
-        if (!x && !y) {
-            x = this.center.x
-            y = this.center.y
-        }
-
         this.instance._ctx.beginPath();
         this.instance._ctx.arc(x, y, radius, startAngle, endAngle, antiClockwise);
         this.instance._ctx.fillStyle = color;
         this.instance._ctx.fill();
-
         if (borderColor) {
-            this.instance._ctx.strokeStyle  = borderColor;
+            this.instance._ctx.strokeStyle = borderColor;
+            this.instance._ctx.lineWidth = borderWidth;
             this.instance._ctx.stroke();
         }
-
         this.instance._ctx.closePath();
-    };
+    }
 
-    static createPolygon ({
-        x = null, 
-        y = null, 
+    static createBox ({
+        x = this.center.x, 
+        y = this.center.y, 
+        rotation = 0,
         width = 10, 
         height = 10,
         size = null,
         color = "#000",
         borderColor = null,
-        rotation = 0
+        borderWidth = 0, 
     } = {}) {
-        if (!x && !y) {
-            x = this.center.x
-            y = this.center.y
-        }
-
         if (size) {
             width = size
             height = size
         }
-
         this.instance._ctx.save();
         this.instance._ctx.beginPath();
-
         this.instance._ctx.translate(x + width / 2, y + height / 2);
         this.instance._ctx.rotate(degToRad(rotation));
         this.instance._ctx.rect(-width / 2, -height / 2, width, height);
-
         this.instance._ctx.fillStyle = color;
         this.instance._ctx.fill();
-
         if (borderColor) {
-            this.instance._ctx.strokeStyle  = borderColor;
+            this.instance._ctx.strokeStyle = borderColor;
+            this.instance._ctx.lineWidth = borderWidth;
             this.instance._ctx.stroke();
         }
-
         this.instance._ctx.restore();
     }
 
-    static createPolygon_LEGACY ({ 
-        x = null, 
-        y = null, 
-        width = 10, 
-        height = 10,
-        size = null,
-        color = "#000",
-        borderColor = null
-    } = {}) {        
+    static createPolygon ({
+        x = this.center.x, 
+        y = this.center.y, 
+        rotation = 0,
+        sides = 3, 
+        width = 10,
+        height = 10, 
+        size = null, 
+        color = "#000", 
+        borderColor = null, 
+        borderWidth = 0, 
+    } = {}) {
         if (size) {
             width = size
             height = size
         }
-        
-        if (!x && !y) {
-            const center = this.calculateCenter(width, height)
-            x = center.x
-            y = center.y
-        }
-
+        const radians = degToRad(rotation) 
+        this.instance._ctx.save();
+        this.instance._ctx.translate(x, y);
+        this.instance._ctx.rotate(radians);
         this.instance._ctx.beginPath();
-        this.instance._ctx.rect(x, y, width, height);
+        this.instance._ctx.moveTo(width * Math.cos(0), height * Math.sin(0));   
+        for (let i = 1; i <= sides; i++) {
+            this.instance._ctx.lineTo(
+                width * Math.cos(i * 2 * Math.PI / sides),
+                height * Math.sin(i * 2 * Math.PI / sides)
+            );
+        }
+        this.instance._ctx.closePath();
         this.instance._ctx.fillStyle = color;
-        this.instance._ctx.fill();
-
         if (borderColor) {
-            this.instance._ctx.strokeStyle  = borderColor;
+            this.instance._ctx.strokeStyle = borderColor;
+            this.instance._ctx.lineWidth = borderWidth;
             this.instance._ctx.stroke();
         }
-
-        this.instance._ctx.closePath();
-    };
+        this.instance._ctx.fill();
+        this.instance._ctx.rotate(-radians);
+        this.instance._ctx.translate(-x, -y);    
+        this.instance._ctx.restore();
+    }
 }
+
+

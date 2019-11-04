@@ -1,4 +1,4 @@
-class PolygonCollider extends Collider {
+class BoxCollider extends Collider {
     
     _width;
     _height;
@@ -26,7 +26,7 @@ class PolygonCollider extends Collider {
         super.start();
         
         if (!this._userRef.transform) {
-            throw Error('You must have a transform in order to use PolygonCollider')
+            throw Error('You must have a transform in order to use BoxCollider')
         }
     }
 
@@ -40,13 +40,21 @@ class PolygonCollider extends Collider {
     detectCollision () {
         let collided = false;
 
-        
         Collision.checkCollisions(this, other => {
-            if (
-                this.x <= other.x + other.xMeasureUnit &&
-                this.x + this._width >= other.x &&
-                this.y <= other.y + other.yMeasureUnit &&
-                this.y + this._height >= other.y
+            if (Collision.SATCollision({
+                    aX: this.x, 
+                    aY: this.y, 
+                    aRotation: this.rotation,
+                    aWidth: this._width,
+                    aHeight: this._height,
+                    aIsRect: true,
+                    bX: other.x, 
+                    bY: other.y, 
+                    bWidth: other.xMeasureUnit,
+                    bHeight: other.yMeasureUnit,
+                    bRotation: other.rotation,
+                    bIsRect: true,
+                }, true)
             ) {
                 collided = true;
 

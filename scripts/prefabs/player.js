@@ -20,12 +20,12 @@ class Player extends GameObject {
         this._height = height;
 
         this.addComponents([
-            new Polygon(this, { 
+            new Box(this, { 
                 width, 
                 height, 
                 color 
             }),
-            new PolygonCollider(this, { 
+            new BoxCollider(this, { 
                 width, 
                 height 
             }),

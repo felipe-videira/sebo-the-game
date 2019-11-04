@@ -1,4 +1,4 @@
-class Polygon extends Component {
+class Box extends Component {
 
     _userRef;
     _color;
@@ -15,21 +15,21 @@ class Polygon extends Component {
     }
 
     get name () {
-        return "Polygon";
+        return "Box";
     }
 
     start () {
         super.start();
         
         if (!this._userRef.transform) {
-            throw Error('To use a Polygon you must have a transform!')
+            throw Error('To use a Box you must have a transform!')
         }
     }
 
     update () {
         super.update(); 
         
-        Canvas.createPolygon({
+        Canvas.createBox({
             x: this._userRef.transform.x,
             y: this._userRef.transform.y,
             rotation: this._userRef.transform.rotation,
