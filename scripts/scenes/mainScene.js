@@ -6,8 +6,8 @@ class MainScene extends Scene {
     _p2Y = Canvas.dimensions.height / 2;
     _p1Color = '#fff' //"#0095DD";
     _p2Color = '#fff' //"#e04343";
-    _pSpeed = 2
-    _pRotationSpeed = 4;
+    _pSpeed = 10
+    _pRotationSpeed = 5;
     _pWidth = 75;
     _pHeight = 10;
 

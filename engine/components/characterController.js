@@ -39,12 +39,8 @@ class CharacterController extends Component {
 
         this._userRef.getComponent('Rigidbody')
             .move(
-                Input.values[this._input].x, 
-                Input.values[this._input].y * -1, 
-                this._speed,
-                Input.values[this._input].rotation,
-                this._rotationSpeed,
+                0.01 * this._speed * Input.values[this._input].y, 
+                0.01 * this._rotationSpeed * Input.values[this._input].x
             );
-
     }
 }

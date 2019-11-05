@@ -39,6 +39,14 @@ class Scene extends MonoBehaviour {
         }
     }
 
+    draw (timestamp) {
+        super.draw(timestamp);
+        
+        for (const name in this._monoBehaviours) {
+            this._monoBehaviours[name].draw(timestamp);
+        }
+    }
+
     addMonoBehaviours (mBsOrCallaback = []) {
         for (const mb of this._validateMonoBehaviours(mBsOrCallaback)) {
             this.addMonoBehaviour(mb);

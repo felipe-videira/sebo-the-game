@@ -1,14 +1,18 @@
 
-const sceneManager = new SceneManager(new PersitentScene());
+let deltaTime;
 let lastDtUpdate = Date.now();
-let _dt;
+let gameRunning = true;
+
+
+const sceneManager = new SceneManager(new PersitentScene());
 
 sceneManager.start();
+
 
 const gameLoop = setInterval(() => {
     const now = Date.now();
 
-    _dt = now - lastDtUpdate;
+    deltaTime = now - lastDtUpdate;
 
     lastDtUpdate = now;
 
@@ -16,8 +20,15 @@ const gameLoop = setInterval(() => {
 }, 10);
 
 
-const deltaTime = () => _dt;
+(function animloop (timestamp) {
+    sceneManager.draw(timestamp);
+
+    gameRunning && window.requestAnimationFrame(animloop);
+})();
+
 
 const gameOver = () => {
+    gameRunning = false;
+
     clearInterval(gameLoop);
 };

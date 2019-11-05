@@ -66,6 +66,14 @@ class GameObject extends MonoBehaviour {
         }
     }
 
+    draw (timestamp) {
+        super.draw(timestamp);
+        
+        for (const componentName in this._components) {
+            this._components[componentName].draw(timestamp);
+        }
+    }
+
     addComponents (componentsOrCallback) {
         for (const component of this._validateComponents(componentsOrCallback)) {
             this.addComponent(component);

@@ -26,8 +26,8 @@ class Box extends Component {
         }
     }
 
-    update () {
-        super.update(); 
+    draw (timestamp) {
+        super.draw(timestamp); 
         
         Canvas.createBox({
             x: this._userRef.transform.x,

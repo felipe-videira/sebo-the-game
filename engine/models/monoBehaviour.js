@@ -11,4 +11,6 @@ class MonoBehaviour {
     start () {}
 
     update () {}
+
+    draw (timestamp) {}
 }

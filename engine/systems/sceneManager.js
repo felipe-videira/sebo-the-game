@@ -48,6 +48,14 @@ class SceneManager extends MonoBehaviour {
         }
     }
 
+    draw (timestamp) {
+        super.draw(timestamp);
+
+        for (const sceneName in this._activeScenes) {
+            this._activeScenes[sceneName].draw(timestamp);
+        }
+    }
+
     static addScenes (scenes) {
         for (const scene of scenes) {
             this.addScene(scene);
