@@ -54,7 +54,7 @@ class BoxCollider extends Collider {
                     bHeight: other.yMeasureUnit,
                     bRotation: other.rotation,
                     bIsRect: true,
-                }, true)
+                })
             ) {
                 collided = true;
 

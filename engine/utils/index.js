@@ -1,19 +1,17 @@
-const isInput = v => {
-    return !!Object.keys(gameConfig.inputs).find(key => v === gameConfig.inputs[key])
-};
+const isInput = v => 
+    !!Object.keys(gameConfig.inputs).find(key => v === gameConfig.inputs[key])
 
-const isNullOrEmpty = v => {
-    return v === null || 
-        v === undefined || 
-        v === false || 
-        v === NaN || 
-        v === "";
-};
+const isNullOrEmpty = v => 
+    v === null || 
+    v === undefined || 
+    v === false || 
+    v === NaN || 
+    v === "";
 
-const uuid4 = () => {
-    return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c => {
-        return (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16);
-    });
-}
+const uuid4 = () => ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c => 
+    (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+);
 
 const degToRad = deg => deg * Math.PI / 180;
+
+const clamp = (num, min, max) => num <= min ? min : num >= max ? max : num;

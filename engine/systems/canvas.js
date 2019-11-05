@@ -48,6 +48,23 @@ class Canvas extends MonoBehaviour {
             y: (this.instance._mainCanvas.height / 2) - (elHeight / 2),
         }
     }
+
+    static createLine ({
+        fromX,
+        fromY,
+        toX,
+        toY,
+        lineWidth = 1,
+        color = '#000',
+    }) {
+        this.instance._ctx.beginPath();
+        this.instance._ctx.moveTo(fromX, fromY);
+        this.instance._ctx.lineTo(toX, toY);
+        this.instance._ctx.strokeStyle = color;
+        this.instance._ctx.lineWidth = lineWidth;
+        this.instance._ctx.stroke();
+        this.instance._ctx.closePath();
+    }
     
     static createCircle ({ 
         x = this.center.x,

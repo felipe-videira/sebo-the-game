@@ -35,28 +35,16 @@ class Collision extends MonoBehaviour {
     }
     
     static boxCollision (
-        {
-            aX, 
-            aY, 
-            aWidth, 
-            aHeight, 
-            bX, 
-            bY, 
-            bWidth, 
-            bHeight
-        } = {}, 
+        { aX,  aY,  aWidth,  aHeight,  bX,  bY,  bWidth,  bHeight } = {}, 
         drawCollider = false, 
-        colliderStyle = { 
-            color: 'transparent', 
-            borderColor: 'green' 
-        }
     ) {
         if (drawCollider) Canvas.createBox({ 
             x: aX,
             y: aY,
             width: aWidth,
             height: aHeight,
-            ...colliderStyle 
+            color: 'transparent', 
+            borderColor: 'green' 
         })
         return aX <= bX + bWidth &&
             aX + aWidth >= bX &&
@@ -65,74 +53,56 @@ class Collision extends MonoBehaviour {
     }
     
     static circleCollision (
-        {
-            aX, 
-            aY, 
-            aRadius, 
-            bX, 
-            bY, 
-            bRadius
-        } = {}, 
+        { aX,  aY,  aRadius,  bX,  bY,  bRadius } = {}, 
         drawCollider = false, 
-        colliderStyle = { 
-            color: 'transparent', 
-            borderColor: 'green'
-        }
     ) {
        if (drawCollider) Canvas.createCircle({ 
             x: aX,
             y: aY,
             radius: aRadius,
-            ...colliderStyle 
+            color: 'transparent', 
+            borderColor: 'green'
         })
-
         return Math.sqrt(((aX - bX) * (aX - bX)) + ((aY - bY) * (aY - bY))) < (aRadius + bRadius);
     };
     
+    static lineCollision (ax, ay, bx, by, cx, cy, dx, dy) {
+        let det, gamma, lambda;
+        det = (bx - ax) * (dy - cy) - (dx - cx) * (by - ay);
+        if (det === 0) {
+            return false;
+        } else {
+            lambda = ((dy - cy) * (dx - ax) + (cx - dx) * (dy - ay)) / det;
+            gamma = ((ay - by) * (dx - ax) + (bx - ax) * (dy - ay)) / det;
+            return (0 <= lambda && lambda <= 1) && (0 <= gamma && gamma <= 1);
+        }
+    }
+
     static SATCollision (
-        {
-            aX, 
-            aY, 
-            aRotation,
-            aWidth = null, 
-            aHeight = null, 
-            aSides = null,
-            aRadius = null,
-            aIsRect = false,
-            bX, 
-            bY,
-            bRotation, 
-            bWidth = null,
-            bHeight = null,
-            bSides = null,
-            bRadius = null,
-            bIsRect = false,
+        { 
+            aX,  aY,  aRotation, aWidth = null,  aHeight = null,  aSides = null, 
+            aRadius = null, aIsRect = false, bX,  bY, bRotation,  bWidth = null, 
+            bHeight = null, bSides = null, bRadius = null, bIsRect = false,
         } = {}, 
         drawCollider = false, 
-        colliderStyle = { 
-            color: 'transparent', 
-            borderColor: 'green' 
-        }
     ) {
-        const aPoints = 
-            this.instance._getAxis(aX, aY, aRotation, aSides, aWidth, aHeight, aRadius, aIsRect)
-        const bPoints = 
-            this.instance._getAxis(bX, bY, bRotation, bSides, bWidth, bHeight, bRadius, bIsRect)
-        
-        let md = Infinity 
-        for (const a of aPoints) {
-            if (drawCollider) Canvas.createCircle({ 
-                x: a.x, 
-                y: a.y, 
-                radius: a.radius || 2, 
-                ...colliderStyle
-            })
-            for (const b of bPoints) {
-                const d = Math.sqrt(((a.x - b.x) * (a.x - b.x)) + ((a.y - b.y) * (a.y - b.y)))
-                if (d < md) md = d
+        const aPoints = this.instance._getAxis(aX, aY, aRotation, aSides, aWidth, aHeight, aRadius, aIsRect)
+        const bPoints = this.instance._getAxis(bX, bY, bRotation, bSides, bWidth, bHeight, bRadius, bIsRect)
+        for (let i = 0; i < aPoints.length; i++) {
+            const aa = aPoints[i]
+            const ab = aPoints[i ? i - 1 : aPoints.length - 1]
+            if (drawCollider) {
+                Canvas.createLine({ fromX: aa.x, fromY: aa.y, toX: ab.x, toY: ab.y, color: 'green' })
+            }
+            for (let j = 1; j < bPoints.length; j++) {
+                const ba = bPoints[j]
+                const bb = bPoints[j ? j - 1 : aPoints.length - j]
+                if (this.lineCollision(aa.x, aa.y, ab.x, ab.y, ba.x, ba.y, bb.x, bb.y)) {
+                    return true
+                }
             }
         }
-        return //?
+        return false
     }
 
     _validateCollider (v) {
