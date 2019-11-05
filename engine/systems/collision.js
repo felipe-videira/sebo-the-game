@@ -151,9 +151,8 @@ class Collision extends MonoBehaviour {
     }
 
     _rotate(cx, cy, x, y, angle) {
-        const radians = degToRad(angle),
-            cos = Math.cos(radians),
-            sin = Math.sin(radians),
+        const cos = Math.cos(angle),
+            sin = Math.sin(angle),
             nx = (cos * (x - cx)) + (sin * (y - cy)) + cx,
             ny = (cos * (y - cy)) - (sin * (x - cx)) + cy;
             

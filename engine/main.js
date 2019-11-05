@@ -4,8 +4,10 @@ let lastDtUpdate = Date.now();
 let gameRunning = true;
 
 
+const canvas = new Canvas();
 const sceneManager = new SceneManager(new PersitentScene());
 
+canvas.start();
 sceneManager.start();
 
 
@@ -21,9 +23,11 @@ const gameLoop = setInterval(() => {
 
 
 (function animloop (timestamp) {
+    canvas.update();
+
     sceneManager.draw(timestamp);
 
-    gameRunning && window.requestAnimationFrame(animloop);
+    gameRunning && window.requestAnimationFrame(animloop, Canvas.canvas);
 })();
 
 

@@ -6,7 +6,6 @@ class PersitentScene extends Scene {
         this.addMonoBehaviours([
             new EventEmitter(),
             new Input(),
-            new Canvas(),
             new Collision()
         ])
     }

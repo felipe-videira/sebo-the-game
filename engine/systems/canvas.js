@@ -22,6 +22,10 @@ class Canvas extends MonoBehaviour {
         return "Canvas";
     }
 
+    get canvas () {
+        return this._mainCanvas;
+    }
+
     update () {
         super.update();
 
