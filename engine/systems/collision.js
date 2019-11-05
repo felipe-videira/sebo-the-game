@@ -78,6 +78,7 @@ class Collision extends MonoBehaviour {
         }
     }
 
+    // needs testing with circles and polygons
     static SATCollision (
         { 
             aX,  aY,  aRotation, aWidth = null,  aHeight = null,  aSides = null, 
