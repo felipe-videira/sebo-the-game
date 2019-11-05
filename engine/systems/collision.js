@@ -94,9 +94,9 @@ class Collision extends MonoBehaviour {
             if (drawCollider) {
                 Canvas.createLine({ fromX: aa.x, fromY: aa.y, toX: ab.x, toY: ab.y, color: 'green' })
             }
-            for (let j = 1; j < bPoints.length; j++) {
+            for (let j = 0; j < bPoints.length; j++) {
                 const ba = bPoints[j]
-                const bb = bPoints[j ? j - 1 : aPoints.length - j]
+                const bb = bPoints[j ? j - 1 : bPoints.length - 1]
                 if (this.lineCollision(aa.x, aa.y, ab.x, ab.y, ba.x, ba.y, bb.x, bb.y)) {
                     return true
                 }

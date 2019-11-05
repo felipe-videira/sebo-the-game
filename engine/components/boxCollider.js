@@ -5,6 +5,7 @@ class BoxCollider extends Collider {
     _collide;
     _previousX;
     _previousY;
+    _previousRotation;
 
     constructor (userRef, { width = 10, height = 10, collide = true  } = {}) {
         super(userRef)
@@ -35,6 +36,7 @@ class BoxCollider extends Collider {
         
         this._previousX = this._userRef.transform.x;
         this._previousY = this._userRef.transform.y;
+        this._previousRotation = this._userRef.transform.rotation;
     }
 
     detectCollision () {
@@ -62,6 +64,7 @@ class BoxCollider extends Collider {
 
                 this._userRef.transform.x = this._previousX;
                 this._userRef.transform.y = this._previousY;
+                this._userRef.transform.rotation = this._previousRotation;
             }
         })
 
