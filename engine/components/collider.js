@@ -43,6 +43,10 @@ class Collider extends Component {
         throw Error("The getter yMeasureUnit must be implemented!");
     }
 
+    get rigidbody () {
+        return this._userRef.getComponent('Rigidbody');
+    }
+
     start () {
         super.start();
         

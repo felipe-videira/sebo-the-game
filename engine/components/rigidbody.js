@@ -18,6 +18,13 @@ class Rigidbody extends Component {
         return "Rigidbody";
     }
 
+    get velocity () {
+        return {
+            x: this._velocityX, 
+            y: this._velocityY
+        }
+    }
+
     start () {
         super.start();
         
@@ -32,13 +39,16 @@ class Rigidbody extends Component {
 
     move (force = 0, rotation = 0) {
         this._userRef.transform.rotation += rotation;
-        
-        this.addForce(force);
+
+        this.addForce(
+            Math.cos(this._userRef.transform.rotation) * force, 
+            Math.sin(this._userRef.transform.rotation) * force
+        );
     }
 
-    addForce(force, rotation = this._userRef.transform.rotation) {
-        this._accelerationX = Math.cos(rotation) * force;
-        this._accelerationY = Math.sin(rotation) * force;
+    addForce (x, y) {
+        this._accelerationX = x;
+        this._accelerationY = y;
         
         this._velocityX += this._accelerationX;
         this._velocityY += this._accelerationY;

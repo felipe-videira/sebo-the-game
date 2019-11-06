@@ -61,10 +61,14 @@ class BoxCollider extends Collider {
                 collided = true;
 
                 if (!this._collide) return;
+                
+                const force = magnitude(this.rigidbody.velocity.x, this.rigidbody.velocity.y);
+                const { x, y } = normalize(this.x - other.x, this.y - other.y);
 
-                this._userRef.transform.x = this._previousX;
-                this._userRef.transform.y = this._previousY;
-                this._userRef.transform.rotation = this._previousRotation;
+                console.log(x, y, force);
+                
+                this.rigidbody.addForce(x * force, y * force);
+                other.rigidbody.addForce(x * -force, y * -force);
             }
         })
 
@@ -100,7 +104,9 @@ class BoxCollider extends Collider {
             collided = true;
         }
 
-        if (collided) this.onCollision()
+        if (collided) {
+            this.onCollision()
+        }
 
         return collided;
     }

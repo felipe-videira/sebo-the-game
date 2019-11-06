@@ -15,3 +15,13 @@ const uuid4 = () => ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
 const degToRad = deg => deg * Math.PI / 180;
 
 const clamp = (num, min, max) => num <= min ? min : num >= max ? max : num;
+
+const magnitude = (x, y) => Math.sqrt(x*x + y*y);
+
+const normalize = (x, y) => {
+    const d = magnitude(x, y);
+    return { 
+        x: x/d, 
+        y: y/d 
+    };
+}

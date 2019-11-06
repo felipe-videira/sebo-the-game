@@ -87,19 +87,19 @@ class Collision extends MonoBehaviour {
         } = {}, 
         drawCollider = false, 
     ) {
-        const aPoints = this.instance._getAxis(aX, aY, aRotation, aSides, aWidth, aHeight, aRadius, aIsRect)
-        const bPoints = this.instance._getAxis(bX, bY, bRotation, bSides, bWidth, bHeight, bRadius, bIsRect)
+        const aPoints = this.instance._getAxis(aX, aY, aRotation, aSides, aWidth, aHeight, aRadius, aIsRect);
+        const bPoints = this.instance._getAxis(bX, bY, bRotation, bSides, bWidth, bHeight, bRadius, bIsRect);
         for (let i = 0; i < aPoints.length; i++) {
-            const aa = aPoints[i]
-            const ab = aPoints[i ? i - 1 : aPoints.length - 1]
+            const aa = aPoints[i];
+            const ab = aPoints[i ? i - 1 : aPoints.length - 1];
             if (drawCollider) {
-                Canvas.createLine({ fromX: aa.x, fromY: aa.y, toX: ab.x, toY: ab.y, color: 'green' })
+                Canvas.createLine({ fromX: aa.x, fromY: aa.y, toX: ab.x, toY: ab.y, color: 'green' });
             }
             for (let j = 0; j < bPoints.length; j++) {
-                const ba = bPoints[j]
-                const bb = bPoints[j ? j - 1 : bPoints.length - 1]
+                const ba = bPoints[j];
+                const bb = bPoints[j ? j - 1 : bPoints.length - 1];
                 if (this.lineCollision(aa.x, aa.y, ab.x, ab.y, ba.x, ba.y, bb.x, bb.y)) {
-                    return true
+                    return true;
                 }
             }
         }
