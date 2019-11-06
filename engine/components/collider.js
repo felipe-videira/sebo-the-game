@@ -35,16 +35,20 @@ class Collider extends Component {
         return this._userRef.transform.rotation;
     }
 
-    get xMeasureUnit () {
-        throw Error("The getter xMeasureUnit must be implemented!");
-    }
-
-    get yMeasureUnit () {
-        throw Error("The getter yMeasureUnit must be implemented!");
-    }
-
     get rigidbody () {
         return this._userRef.getComponent('Rigidbody');
+    }
+
+    get user () {
+        return this._userRef;
+    }
+
+    get xunit () {
+        throw Error("The getter xunit must be implemented!");
+    }
+    
+    get yunit () {
+        throw Error("The getter yunit must be implemented!");
     }
 
     start () {

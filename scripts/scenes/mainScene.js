@@ -6,8 +6,8 @@ class MainScene extends Scene {
     _pRotationSpeed = 5;
     _pWidth = 75;
     _pHeight = 10;
-    _p1Y = Canvas.dimensions.height / 2;
-    _p2Y = Canvas.dimensions.height / 2;
+    _p1Y = Canvas.dimensions.height - Canvas.dimensions.height / 4;
+    _p2Y = Canvas.dimensions.height / 4;
     _p1X = (Canvas.dimensions.width / 2) + this._pWidth *.25;
     _p2X = (Canvas.dimensions.width / 2) - this._pWidth *1.25;
     

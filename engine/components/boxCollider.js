@@ -2,24 +2,23 @@ class BoxCollider extends Collider {
     
     _width;
     _height;
-    _collide;
-    _previousX;
-    _previousY;
-    _previousRotation;
+    _abCollision;
+    _borderCollision;
 
-    constructor (userRef, { width = 10, height = 10, collide = true  } = {}) {
+    constructor (userRef, { width = 10, height = 10, abCollision = true, borderCollision = true } = {}) {
         super(userRef)
 
         this._width = width;
         this._height = height;
-        this._collide = collide;
+        this._abCollision = abCollision;
+        this._borderCollision = borderCollision;
     }
 
-    get xMeasureUnit () {
+    get xunit () {
         return this._width;
     }
     
-    get yMeasureUnit () {
+    get yunit () {
         return this._height;
     }
 
@@ -31,19 +30,11 @@ class BoxCollider extends Collider {
         }
     }
 
-    update () {
-        super.update();
-        
-        this._previousX = this._userRef.transform.x;
-        this._previousY = this._userRef.transform.y;
-        this._previousRotation = this._userRef.transform.rotation;
-    }
-
     detectCollision () {
         let collided = false;
 
         Collision.checkCollisions(this, other => {
-            if (Collision.SATCollision({
+            if (Collision.abSatCollision({
                     aX: this.x, 
                     aY: this.y, 
                     aRotation: this.rotation,
@@ -52,50 +43,30 @@ class BoxCollider extends Collider {
                     aIsRect: true,
                     bX: other.x, 
                     bY: other.y, 
-                    bWidth: other.xMeasureUnit,
-                    bHeight: other.yMeasureUnit,
+                    bWidth: other.xunit,
+                    bHeight: other.yunit,
                     bRotation: other.rotation,
                     bIsRect: true,
                 })
             ) {
                 collided = true;
 
-                if (!this._collide) return;
+                if (!this._abCollision) return;
                 
-                const force = magnitude(this.rigidbody.velocity.x, this.rigidbody.velocity.y);
-                const { x, y } = normalize(this.x - other.x, this.y - other.y);
-                this.rigidbody.addForce(x * force, y * force);
-                other.rigidbody.addForce(x * -force, y * -force);
+                Collision.abPushAway(this, other);
             }
         })
-
-        if (this.x + this._width > Canvas.dimensions.width) {
-            if (this._collide) 
-                this._userRef.transform.x = Canvas.dimensions.width - this._width;
-            
+        
+        const border = Collision.canvasSatCollision(this);
+        if (border) {
             collided = true;
+
+            if (!this._borderCollision) return;
+
+            Collision.pushAway(this, border);
         }
 
-        if (this.x < 0) {
-            if (this._collide) this._userRef.transform.x = 0;
-
-            collided = true;
-        }
-
-        if (this.y + this._height > Canvas.dimensions.height) {
-            if (this._collide) 
-                this._userRef.transform.y = Canvas.dimensions.height - this._height;
-
-            collided = true;
-        }
-
-        if (this.y < 0) {
-            if (this._collide) this._userRef.transform.y = 0;
-
-            collided = true;
-        }
-
-        collided && this.onCollision()
+        collided && this.onCollision();
 
         return collided;
     }

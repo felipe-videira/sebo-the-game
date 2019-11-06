@@ -45,7 +45,8 @@ class Collision extends MonoBehaviour {
             height: aHeight,
             color: 'transparent', 
             borderColor: 'green' 
-        })
+        });
+
         return aX <= bX + bWidth &&
             aX + aWidth >= bX &&
             aY <= bY + bHeight &&
@@ -62,24 +63,29 @@ class Collision extends MonoBehaviour {
             radius: aRadius,
             color: 'transparent', 
             borderColor: 'green'
-        })
+        });
+
         return Math.sqrt(((aX - bX) * (aX - bX)) + ((aY - bY) * (aY - bY))) < (aRadius + bRadius);
     };
     
     static lineCollision (ax, ay, bx, by, cx, cy, dx, dy) {
         let det, gamma, lambda;
+
         det = (bx - ax) * (dy - cy) - (dx - cx) * (by - ay);
+
         if (det === 0) {
             return false;
         } else {
             lambda = ((dy - cy) * (dx - ax) + (cx - dx) * (dy - ay)) / det;
+
             gamma = ((ay - by) * (dx - ax) + (bx - ax) * (dy - ay)) / det;
+
             return (0 <= lambda && lambda <= 1) && (0 <= gamma && gamma <= 1);
         }
     }
 
     // needs testing with circles and polygons
-    static SATCollision (
+    static abSatCollision (
         { 
             aX,  aY,  aRotation, aWidth = null,  aHeight = null,  aSides = null, 
             aRadius = null, aIsRect = false, bX,  bY, bRotation,  bWidth = null, 
@@ -87,23 +93,99 @@ class Collision extends MonoBehaviour {
         } = {}, 
         drawCollider = false, 
     ) {
-        const aPoints = this.instance._getAxis(aX, aY, aRotation, aSides, aWidth, aHeight, aRadius, aIsRect);
-        const bPoints = this.instance._getAxis(bX, bY, bRotation, bSides, bWidth, bHeight, bRadius, bIsRect);
-        for (let i = 0; i < aPoints.length; i++) {
-            const aa = aPoints[i];
-            const ab = aPoints[i ? i - 1 : aPoints.length - 1];
-            if (drawCollider) {
-                Canvas.createLine({ fromX: aa.x, fromY: aa.y, toX: ab.x, toY: ab.y, color: 'green' });
-            }
-            for (let j = 0; j < bPoints.length; j++) {
-                const ba = bPoints[j];
-                const bb = bPoints[j ? j - 1 : bPoints.length - 1];
+        const aAxis = this.instance._getAxis(aX, aY, aRotation, aWidth, aHeight, aIsRect, aRadius, aSides);
+        const bAxis = this.instance._getAxis(bX, bY, bRotation, bWidth, bHeight, bIsRect, bRadius, bSides);
+
+        for (let i = 0; i < aAxis.length; i++) {
+            const aa = aAxis[i];
+            const ab = aAxis[i ? i - 1 : aAxis.length - 1];
+
+            if (drawCollider) Canvas.createLine({ fromX: aa.x, fromY: aa.y, toX: ab.x, toY: ab.y, color: 'green' });
+  
+            for (let j = 0; j < bAxis.length; j++) {
+                const ba = bAxis[j];
+                const bb = bAxis[j ? j - 1 : bAxis.length - 1];
+
                 if (this.lineCollision(aa.x, aa.y, ab.x, ab.y, ba.x, ba.y, bb.x, bb.y)) {
                     return true;
                 }
             }
         }
+
         return false
+    }
+
+    static canvasBoxCollision (coll, collide = true) {
+        let collided = true;
+
+        if (coll.x + coll.xunit > Canvas.dimensions.width) {
+            if (collide) coll.user.transform.x = Canvas.dimensions.width - coll.xunit;
+            
+            collided = true;
+        }
+
+        if (coll.x < 0) {
+            if (collide) coll.user.transform.x = 0;
+
+            collided = true;
+        }
+
+        if (coll.y + coll.yunit > Canvas.dimensions.height) {
+            if (collide) coll.user.transform.y = Canvas.dimensions.height - coll.yunit;
+
+            collided = true;
+        }
+
+        if (coll.y < 0) {
+            if (collide) coll.user.transform.y = 0;
+
+            collided = true;
+        }
+
+        return collided;
+    }
+
+    // only work with rects, for now
+    static canvasSatCollision ({ x, y, rotation, xunit, yunit }) {
+        for (const axis of this.instance._getAxis(x, y, rotation, xunit, yunit, true)) {
+            if (axis.x > Canvas.dimensions.width) 
+                return { x: axis.x - Canvas.dimensions.width, y }
+            if (axis.x < 0) 
+                return { x: 0, y }
+            if (axis.y > Canvas.dimensions.height) 
+                return { x, y: axis.y - Canvas.dimensions.height }
+            if (axis.y < 0)  
+                return { x, y: 0 }
+        }
+        
+        return;
+    }
+
+    static abPushAway (a, b) {
+        if (!a.isCollider || !b.isCollider) {
+            throw Error("Something here is not a Collider!");
+        }
+
+        const force = magnitude(a.rigidbody.velocity.x, a.rigidbody.velocity.y);
+
+        const { x, y } = normalize(a.x - b.x, a.y - b.y);
+
+        a.rigidbody.addForce(x * force, y * force);
+
+        b.rigidbody.addForce(x * -force, y * -force);
+    }
+
+    static pushAway (a, coord) {
+        console.log(coord)
+        if (!a.isCollider || !coord.hasOwnProperty('x') || !coord.hasOwnProperty('y')) {
+            throw Error("Invalida parameters!");
+        }
+
+        const force = magnitude(a.rigidbody.velocity.x, a.rigidbody.velocity.y);
+
+        const { x, y } = normalize(a.x - coord.x, a.y - coord.y);
+
+        a.rigidbody.addForce(x * force, y * force);
     }
 
     _validateCollider (v) {
@@ -118,11 +200,11 @@ class Collision extends MonoBehaviour {
         x,
         y,
         rotation,
-        sides,
         width = null,
         height = null,
+        rect = false,
         radius = null,
-        rect = false
+        sides = null
     ) => {
         // needs to be tested
         if (radius) return [{ x, y, radius }]
