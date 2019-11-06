@@ -1,16 +1,16 @@
 class MainScene extends Scene {
 
-    _p1X = (Canvas.dimensions.width / 2) + (Canvas.dimensions.width / 4);
-    _p1Y = Canvas.dimensions.height / 2;
-    _p2X = (Canvas.dimensions.width / 2) - (Canvas.dimensions.width / 4);
-    _p2Y = Canvas.dimensions.height / 2;
     _p1Color = '#fff' //"#0095DD";
     _p2Color = '#fff' //"#e04343";
     _pSpeed = 10
     _pRotationSpeed = 5;
     _pWidth = 75;
     _pHeight = 10;
-
+    _p1Y = Canvas.dimensions.height / 2;
+    _p2Y = Canvas.dimensions.height / 2;
+    _p1X = (Canvas.dimensions.width / 2) + this._pWidth *.25;
+    _p2X = (Canvas.dimensions.width / 2) - this._pWidth *1.25;
+    
     constructor () {
         super();
         
