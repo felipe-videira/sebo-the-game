@@ -62,6 +62,8 @@ class GameObject extends MonoBehaviour {
         super.update();
         
         for (const componentName in this._components) {
+            if (!this._components[componentName].active) continue;
+            
             this._components[componentName].update();
         }
     }
@@ -70,6 +72,8 @@ class GameObject extends MonoBehaviour {
         super.draw(timestamp);
         
         for (const componentName in this._components) {
+            if (!this._components[componentName].active) continue;
+
             this._components[componentName].draw(timestamp);
         }
     }
@@ -89,7 +93,9 @@ class GameObject extends MonoBehaviour {
     }
 
     getComponent (name) {
-        return this._components[name];
+        const component = this._components[name] || {};
+
+        return component.active && component;
     }
 
     _validateComponent (v) {

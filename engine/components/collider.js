@@ -67,7 +67,7 @@ class Collider extends Component {
         throw Error("The method detectCollision must be implemented!");
     }
     
-    subscribeOnCollision (callback) {
+    onCollision (callback) {
         if (typeof callback !== 'function') {
             throw Error("'onCollision' must be a function!");
         }
@@ -75,9 +75,9 @@ class Collider extends Component {
         this._onCollision.push(callback);
     }
 
-    onCollision () {
+    _collide (params) {
         for (const callback of this._onCollision) {
-            callback();
+            callback(...params);
         }
     }
 

@@ -1,5 +1,8 @@
 class Canvas extends MonoBehaviour {
     
+    _lightTheme = '#eee';
+    _darkTheme = '#1d1c1c';
+    _canvasBackground = this._lightTheme;
     _mainCanvas;
     _ctx;
     
@@ -29,7 +32,8 @@ class Canvas extends MonoBehaviour {
     update () {
         super.update();
 
-        this._ctx.clearRect(0, 0, this._mainCanvas.width, this._mainCanvas.height);
+        this._ctx.fillStyle = this._canvasBackground;
+        this._ctx.fillRect(0, 0, this._mainCanvas.width, this._mainCanvas.height);
     }
     
     static get dimensions () {
@@ -51,6 +55,14 @@ class Canvas extends MonoBehaviour {
             x: (this.instance._mainCanvas.width / 2) - (elWidth / 2),
             y: (this.instance._mainCanvas.height / 2) - (elHeight / 2),
         }
+    }
+
+    
+    static flipTheme () {
+        this.instance._canvasBackground = 
+            this.instance._canvasBackground === this.instance._lightTheme 
+                ? this.instance._darkTheme
+                : this.instance._lightTheme; 
     }
 
     static createLine ({
@@ -101,6 +113,8 @@ class Canvas extends MonoBehaviour {
         height = 10,
         size = null,
         color = "#000",
+        gradient = null,
+        opacity = 1,
         borderColor = null,
         borderWidth = 0, 
     } = {}) {
@@ -113,7 +127,12 @@ class Canvas extends MonoBehaviour {
         this.instance._ctx.translate(x + width / 2, y + height / 2);
         this.instance._ctx.rotate(rotation);
         this.instance._ctx.rect(-width / 2, -height / 2, width, height);
+        if (Array.isArray(color)) {
+            if (!gradient) gradient = [0, 0, width / 2, 0];
+            color = this.instance._createGradient(color, gradient);
+        }
         this.instance._ctx.fillStyle = color;
+        this.instance._ctx.globalAlpha = opacity; 
         this.instance._ctx.fill();
         if (borderColor) {
             this.instance._ctx.strokeStyle = borderColor;
@@ -162,6 +181,14 @@ class Canvas extends MonoBehaviour {
         this.instance._ctx.rotate(-radians);
         this.instance._ctx.translate(-x, -y);    
         this.instance._ctx.restore();
+    }
+
+    _createGradient(colors, gradient) {
+        const grd = this._ctx.createLinearGradient(...gradient);
+        for (const { value, stop } of colors) {
+            grd.addColorStop(stop, value)
+        }
+        return grd;
     }
 }
 

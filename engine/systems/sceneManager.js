@@ -1,8 +1,9 @@
-//TODO: improve this
+
 class SceneManager extends MonoBehaviour {
     
     _started = false;
-    _activeScenes = {};
+    _scenes = {};
+    _activeSceneName;
 
     constructor (activeScene) {
         super();
@@ -22,37 +23,33 @@ class SceneManager extends MonoBehaviour {
         return "SceneManager";
     }
 
-    get activeScenes () {
-        throw Error("Do not access the activeScenes directly!");
-    } 
-
-    set activeScenes (v) {
-        throw Error("Do not set the activeScenes directly!");
-    } 
-
     start () {
         super.start();
-
-        for (const sceneName in this._activeScenes) {
-            this._activeScenes[sceneName].start();
+        
+        for (const name in this._scenes) {
+            if (!this._scenes[name].active) continue;
+            
+            this._scenes[name].start();
         }
-
-        this._started = true;
     }
 
     update () {
         super.update();
 
-        for (const sceneName in this._activeScenes) {
-            this._activeScenes[sceneName].update();
+        for (const name in this._scenes) {
+            if (!this._scenes[name].active) continue;
+            
+            this._scenes[name].update();
         }
     }
 
     draw (timestamp) {
         super.draw(timestamp);
 
-        for (const sceneName in this._activeScenes) {
-            this._activeScenes[sceneName].draw(timestamp);
+        for (const name in this._scenes) {
+            if (!this._scenes[name].active) continue;
+            
+            this._scenes[name].draw();
         }
     }
 
@@ -62,26 +59,42 @@ class SceneManager extends MonoBehaviour {
         }
     }
     
-    static addScene (scene) {
+    static addScene (scene, active = false) {
         this.instance._validateScene(scene);
         
-        this.instance._activeScenes[scene.name] = scene;
+        this.instance._scenes[scene.name] = scene;
 
-        if (this.instance._started) this.instance._activeScenes[scene.name].start();
+        if (active) this.setSceneActive(scene.name);
+    }
+    
+    static setSceneActive (sceneName) {
+        if (!this.instance._scenes[sceneName]) throw Error("Scene not found");
+
+        this.instance._scenes[this.instance._activeSceneName] && 
+            this.instance._scenes[this.instance._activeSceneName].setActive(false);
+        
+        this.instance._activeSceneName = sceneName;
+        
+        this.instance._scenes[this.instance._activeSceneName].setActive(true);
+        this.instance._scenes[this.instance._activeSceneName].start();
     }
 
-    _addScene (scene) {
-        this._validateScene(scene, false);
-        
-        this._activeScenes[scene.name] = scene;
-
-        if (this._started) this._activeScenes[scene.name].start();
+    static reloadActiveScene () {
+        this.instance._scenes[this._activeSceneName].start();
     }
 
     static removeScene (sceneName) {
         if (FORBIDDEN_SCENE_NAMES.includes(sceneName)) return false;
 
-        return delete this.instance._activeScenes[sceneName];
+        return delete this.instance._scenes[sceneName];
+    }
+
+    _addScene (scene) {
+        this._validateScene(scene, false);
+        
+        this._scenes[scene.name] = scene;
+        
+        this._scenes[scene.name].start();
     }
 
     _validateScene (v, checkName = true) {
@@ -93,5 +106,4 @@ class SceneManager extends MonoBehaviour {
             throw Error("Invalid scene name!");
         }
     }
-
 }

@@ -35,6 +35,8 @@ class Scene extends MonoBehaviour {
         super.update();
         
         for (const name in this._monoBehaviours) {
+            if (!this._monoBehaviours[name].active) continue;
+
             this._monoBehaviours[name].update();
         }
     }
@@ -43,6 +45,8 @@ class Scene extends MonoBehaviour {
         super.draw(timestamp);
         
         for (const name in this._monoBehaviours) {
+            if (!this._monoBehaviours[name].active) continue;
+            
             this._monoBehaviours[name].draw(timestamp);
         }
     }
@@ -62,7 +66,13 @@ class Scene extends MonoBehaviour {
     }
 
     getMonoBehaviour (name) {
-        return this._monoBehaviours[name];
+        const monoBehaviour = this._monoBehaviours[name] || {};
+
+        return monoBehaviour.active && monoBehaviour;
+    }
+
+    cleanMonoBehaviours () {
+        this._monoBehaviours = {}
     }
 
     _validateMonoBehaviour (v) {

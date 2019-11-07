@@ -1,7 +1,7 @@
 class MainScene extends Scene {
 
-    _p1Color = '#000' //"#0095DD";
-    _p2Color = '#000' //"#e04343";
+    _p1Color = "#0095DD";
+    _p2Color = "#e04343";
     _pSpeed = 10
     _pRotationSpeed = 5;
     _pWidth = 75;
@@ -10,12 +10,18 @@ class MainScene extends Scene {
     _p2Y = Canvas.dimensions.height / 4;
     _p1X = (Canvas.dimensions.width / 2) + this._pWidth *.25;
     _p2X = (Canvas.dimensions.width / 2) - this._pWidth *1.25;
+    _alivePlayers = 2;
     
-    constructor () {
-        super();
-        
+    get name () {
+        return "MainScene";
+    }
+
+    start () {
+        super.start();
+
+        this.cleanMonoBehaviours();
+
         this.addMonoBehaviours([
-            new GameManager(),
             new Player("P1", {
                 x: this._p1X,
                 y: this._p1Y,
@@ -25,6 +31,7 @@ class MainScene extends Scene {
                 speed: this._pSpeed,
                 rotationSpeed: this._pRotationSpeed,
                 input: gameConfig.inputs.p1, 
+                startLife: 1,
             }),
             new Player("P2", { 
                 x: this._p2X,
@@ -35,11 +42,19 @@ class MainScene extends Scene {
                 speed: this._pSpeed,
                 rotationSpeed: this._pRotationSpeed,
                 input: gameConfig.inputs.p2, 
+                startLife: 0.5,
             }),
-        ])
+        ]);
+
+        this.getMonoBehaviour("P1").onDeath(() => this._onPlayerDeath);
+        this.getMonoBehaviour("P2").onDeath(() => this._onPlayerDeath);
     }
-    
-    get name () {
-        return "MainScene";
+
+    _onPlayerDeath () {
+        this._alivePlayers--;
+
+        if (this._alivePlayers <= 1) {
+            SceneManager.reloadActiveScene();
+        }
     }
 }

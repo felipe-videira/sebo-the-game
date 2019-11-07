@@ -97,11 +97,14 @@ class Collision extends MonoBehaviour {
                 const ba = bAxis[j];
                 const bb = bAxis[j ? j - 1 : bAxis.length - 1];
                 if (this.lineCollision(aa.x, aa.y, ab.x, ab.y, ba.x, ba.y, bb.x, bb.y)) {
-                    return true;
+                    return { 
+                        a: { axisA: aa, axisB: ab },
+                        b: { axisA: ba, axisB: bb }
+                    };
                 }
             }
         }
-        return false
+        return;
     }
 
     static canvasBoxCollision (coll, collide = true) {

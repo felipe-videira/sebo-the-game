@@ -31,43 +31,44 @@ class BoxCollider extends Collider {
     }
 
     detectCollision () {
-        let collided = false;
+        let collision = null;
+        let collidedObj = null
 
         Collision.checkCollisions(this, other => {
-            if (Collision.abSatCollision({
-                    aX: this.x, 
-                    aY: this.y, 
-                    aRotation: this.rotation,
-                    aWidth: this._width,
-                    aHeight: this._height,
-                    aIsRect: true,
-                    bX: other.x, 
-                    bY: other.y, 
-                    bWidth: other.xunit,
-                    bHeight: other.yunit,
-                    bRotation: other.rotation,
-                    bIsRect: true,
-                })
-            ) {
-                collided = true;
+            const abCollision = Collision.abSatCollision({
+                aX: this.x, 
+                aY: this.y, 
+                aRotation: this.rotation,
+                aWidth: this._width,
+                aHeight: this._height,
+                aIsRect: true,
+                bX: other.x, 
+                bY: other.y, 
+                bWidth: other.xunit,
+                bHeight: other.yunit,
+                bRotation: other.rotation,
+                bIsRect: true,
+            })
+            
+            if (abCollision) {
+                collision = abCollision;
 
-                if (!this._abCollision) return;
-                
-                Collision.abPushAway(this, other);
+                this._abCollision && Collision.abPushAway(this, other);
+
+                collidedObj = other;
             }
         })
         
-        const collision = Collision.canvasSatCollision(this);
-        if (collision) {
-            collided = true;
+        const canvasColl = Collision.canvasSatCollision(this);
 
-            if (!this._borderCollision) return;
+        if (canvasColl) {
+            collision = canvasColl;
 
-            Collision.pushAway(collision.axis, collision.pos, this);
+            this._borderCollision && Collision.pushAway(canvasColl.axis, canvasColl.pos, this);
         }
 
-        collided && this.onCollision();
+        collision && this._collide([collision, this, collidedObj]);
 
-        return collided;
+        return collision;
     }
 }

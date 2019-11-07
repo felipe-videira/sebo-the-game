@@ -1,2 +1,3 @@
-SceneManager.addScene(new MainScene());
+SceneManager.addScene(new MainScene(), true);
 
+Canvas.flipTheme();
