@@ -1,7 +1,7 @@
 class MainScene extends Scene {
 
-    _p1Color = '#fff' //"#0095DD";
-    _p2Color = '#fff' //"#e04343";
+    _p1Color = '#000' //"#0095DD";
+    _p2Color = '#000' //"#e04343";
     _pSpeed = 10
     _pRotationSpeed = 5;
     _pWidth = 75;

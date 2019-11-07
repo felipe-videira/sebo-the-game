@@ -30,7 +30,6 @@ class Collision extends MonoBehaviour {
 
     static subscribeCollider (v) {
         const collider = this.instance._validateCollider(v);
-
         this.instance._colliders[collider.uuid] = collider;
     }
     
@@ -64,22 +63,17 @@ class Collision extends MonoBehaviour {
             color: 'transparent', 
             borderColor: 'green'
         });
-
         return Math.sqrt(((aX - bX) * (aX - bX)) + ((aY - bY) * (aY - bY))) < (aRadius + bRadius);
     };
     
     static lineCollision (ax, ay, bx, by, cx, cy, dx, dy) {
         let det, gamma, lambda;
-
         det = (bx - ax) * (dy - cy) - (dx - cx) * (by - ay);
-
         if (det === 0) {
             return false;
         } else {
             lambda = ((dy - cy) * (dx - ax) + (cx - dx) * (dy - ay)) / det;
-
             gamma = ((ay - by) * (dx - ax) + (bx - ax) * (dy - ay)) / det;
-
             return (0 <= lambda && lambda <= 1) && (0 <= gamma && gamma <= 1);
         }
     }
@@ -95,53 +89,39 @@ class Collision extends MonoBehaviour {
     ) {
         const aAxis = this.instance._getAxis(aX, aY, aRotation, aWidth, aHeight, aIsRect, aRadius, aSides);
         const bAxis = this.instance._getAxis(bX, bY, bRotation, bWidth, bHeight, bIsRect, bRadius, bSides);
-
         for (let i = 0; i < aAxis.length; i++) {
             const aa = aAxis[i];
             const ab = aAxis[i ? i - 1 : aAxis.length - 1];
-
             if (drawCollider) Canvas.createLine({ fromX: aa.x, fromY: aa.y, toX: ab.x, toY: ab.y, color: 'green' });
-  
             for (let j = 0; j < bAxis.length; j++) {
                 const ba = bAxis[j];
                 const bb = bAxis[j ? j - 1 : bAxis.length - 1];
-
                 if (this.lineCollision(aa.x, aa.y, ab.x, ab.y, ba.x, ba.y, bb.x, bb.y)) {
                     return true;
                 }
             }
         }
-
         return false
     }
 
     static canvasBoxCollision (coll, collide = true) {
         let collided = true;
-
         if (coll.x + coll.xunit > Canvas.dimensions.width) {
             if (collide) coll.user.transform.x = Canvas.dimensions.width - coll.xunit;
-            
             collided = true;
         }
-
         if (coll.x < 0) {
             if (collide) coll.user.transform.x = 0;
-
             collided = true;
         }
-
         if (coll.y + coll.yunit > Canvas.dimensions.height) {
             if (collide) coll.user.transform.y = Canvas.dimensions.height - coll.yunit;
-
             collided = true;
         }
-
         if (coll.y < 0) {
             if (collide) coll.user.transform.y = 0;
-
             collided = true;
         }
-
         return collided;
     }
 
@@ -149,15 +129,14 @@ class Collision extends MonoBehaviour {
     static canvasSatCollision ({ x, y, rotation, xunit, yunit }) {
         for (const axis of this.instance._getAxis(x, y, rotation, xunit, yunit, true)) {
             if (axis.x > Canvas.dimensions.width) 
-                return { x: axis.x - Canvas.dimensions.width, y }
+                return { axis, pos: { x: axis.x - Canvas.dimensions.width, y: axis.y }}
             if (axis.x < 0) 
-                return { x: 0, y }
+                return { axis, pos: { x: 0, y: axis.y }}
             if (axis.y > Canvas.dimensions.height) 
-                return { x, y: axis.y - Canvas.dimensions.height }
+                return { axis, pos: { x: axis.x, y: axis.y - Canvas.dimensions.height }}
             if (axis.y < 0)  
-                return { x, y: 0 }
+                return { axis, pos: { x: axis.x, y: 0 }}
         }
-        
         return;
     }
 
@@ -166,26 +145,23 @@ class Collision extends MonoBehaviour {
             throw Error("Something here is not a Collider!");
         }
 
-        const force = magnitude(a.rigidbody.velocity.x, a.rigidbody.velocity.y);
-
+        const m = magnitude(a.rigidbody.velocity.x, a.rigidbody.velocity.y);
         const { x, y } = normalize(a.x - b.x, a.y - b.y);
-
-        a.rigidbody.addForce(x * force, y * force);
-
-        b.rigidbody.addForce(x * -force, y * -force);
+        a.rigidbody.addForce(x * m, y * m);
+        b.rigidbody.addForce(x * -m, y * -m);
     }
 
-    static pushAway (a, coord) {
-        console.log(coord)
-        if (!a.isCollider || !coord.hasOwnProperty('x') || !coord.hasOwnProperty('y')) {
-            throw Error("Invalida parameters!");
-        }
-
-        const force = magnitude(a.rigidbody.velocity.x, a.rigidbody.velocity.y);
-
-        const { x, y } = normalize(a.x - coord.x, a.y - coord.y);
-
-        a.rigidbody.addForce(x * force, y * force);
+    static pushAway (pa, pb, go) {
+        if (!go.rigidbody || 
+            !pa.hasOwnProperty('x') || 
+            !pa.hasOwnProperty('y') || 
+            !pb.hasOwnProperty('x') || 
+            !pb.hasOwnProperty('y')) {
+            throw Error("Invalid parameters!");
+        }   
+        const m = magnitude(go.rigidbody.velocity.x, go.rigidbody.velocity.y);
+        const { x, y } = normalize(pa.x - pb.x, pa.y - pb.y);
+        go.rigidbody.addForce(x * -m, y * -m);
     }
 
     _validateCollider (v) {
@@ -208,7 +184,6 @@ class Collision extends MonoBehaviour {
     ) => {
         // needs to be tested
         if (radius) return [{ x, y, radius }]
-  
         if (rect) {
             const cx = x + (width / 2)
             const cy = y + (height / 2)
@@ -220,7 +195,6 @@ class Collision extends MonoBehaviour {
                 this._rotate(cx, cy, x + width, y, rotation),
             ]
         }
-        
         // needs to be tested
         const points = []
         for (var i = 1; i <= sides; i++) {
@@ -237,7 +211,6 @@ class Collision extends MonoBehaviour {
             sin = Math.sin(angle),
             nx = (cos * (x - cx)) + (sin * (y - cy)) + cx,
             ny = (cos * (y - cy)) - (sin * (x - cx)) + cy;
-            
         return { cx, cy, x: nx, y: ny };
     }
 }

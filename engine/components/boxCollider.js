@@ -57,13 +57,13 @@ class BoxCollider extends Collider {
             }
         })
         
-        const border = Collision.canvasSatCollision(this);
-        if (border) {
+        const collision = Collision.canvasSatCollision(this);
+        if (collision) {
             collided = true;
 
             if (!this._borderCollision) return;
 
-            Collision.pushAway(this, border);
+            Collision.pushAway(collision.axis, collision.pos, this);
         }
 
         collided && this.onCollision();

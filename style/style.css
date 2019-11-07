@@ -5,7 +5,7 @@
 }
 
 .main-canvas { 
-    background:#eee; 
+    background:rgb(39, 38, 38); /* #eee; */
     display: block;
     margin: 0 auto;
 }
