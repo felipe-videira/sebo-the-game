@@ -29,9 +29,6 @@ const normalize = (x, y) => {
 const distance = (ax, ay, bx, by) => Math.sqrt((ax - bx) * (ax - bx) + (ay - by) * (ay - by));
 
 const shadeColor = (color, percent) => {
-    if (/^rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d+(?:\.\d+)?))?\)$/.test(color)) {
-        throw Error("The color must be in rgba format!")
-    }
     let R = parseInt(color.substring(1,3), 16);
     let G = parseInt(color.substring(3,5), 16);
     let B = parseInt(color.substring(5,7), 16);
