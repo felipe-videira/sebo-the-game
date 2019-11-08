@@ -31,7 +31,6 @@ class MainScene extends Scene {
                 speed: this._pSpeed,
                 rotationSpeed: this._pRotationSpeed,
                 input: gameConfig.inputs.p1, 
-                startLife: 1,
             }),
             new Player("P2", { 
                 x: this._p2X,
@@ -42,7 +41,6 @@ class MainScene extends Scene {
                 speed: this._pSpeed,
                 rotationSpeed: this._pRotationSpeed,
                 input: gameConfig.inputs.p2, 
-                startLife: 0.5,
             }),
         ]);
 

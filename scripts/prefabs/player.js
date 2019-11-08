@@ -26,35 +26,19 @@ class Player extends GameObject {
 
         this._width = width;
         this._height = height;
+        
+        this.life = startLife;
 
-        const darkenColor = shadeColor(color, -50);
-
-        this._colors = [{
-            value: color,
-            stop: 0
-        }, {
-            value: darkenColor, 
-            stop: 0.25
-        }, {
-            value: darkenColor, 
-            stop: 0.75
-        }, {
-            value: darkenColor, 
-            stop: 1
-        }];
-
-        this._life = this._validateLife(startLife);
+        this._colors = [
+            { value: shadeColor(color, -50), stop: 0 },
+            { value: color, stop: 1 }, 
+        ];
 
         this.addComponents([
             new Box(this, { 
                 width, 
                 height,
-                gradient: [
-                    (this.transform.x + width) * this._life, 
-                    0, 
-                    this.transform.x + width, 
-                    0
-                ],
+                gradient: this.lifeBarGradient,
                 color: this._colors, 
             }),
             new BoxCollider(this, { 
@@ -73,10 +57,11 @@ class Player extends GameObject {
     }
 
     get lifeBarGradient () {
+        const gradient = this.transform.x - (this._width * this.life);
         return [
-            (this.transform.x + this._width) * this.life, 
+            gradient - 1, 
             0, 
-            this.transform.x + this._width, 
+            gradient, 
             0
         ];
     }
@@ -109,6 +94,8 @@ class Player extends GameObject {
     }
 
     _updateLifeBar () {
+        if (!this.getComponent("Box")) return;
+
         this.getComponent("Box").gradient = this.lifeBarGradient;
     }
 
