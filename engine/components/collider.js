@@ -77,7 +77,7 @@ class Collider extends Component {
 
     _collide (params) {
         for (const callback of this._onCollision) {
-            callback(...params);
+            callback(params);
         }
     }
 

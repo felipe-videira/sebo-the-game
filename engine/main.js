@@ -1,38 +1,37 @@
+const _canvas = new Canvas();
+const _sceneManager = new SceneManager(new PersitentScene());
 
-let deltaTime;
-let lastDtUpdate = Date.now();
-let gameRunning = true;
+_canvas.start();
+_sceneManager.start();
 
-
-const canvas = new Canvas();
-const sceneManager = new SceneManager(new PersitentScene());
-
-canvas.start();
-sceneManager.start();
+const _gameStartTime = Date.now();
+let _lastDtUpdate = Date.now();
+let _gameRunning = true;
+let _deltaTime;
 
 
 const gameLoop = setInterval(() => {
     const now = Date.now();
-
-    deltaTime = now - lastDtUpdate;
-
-    lastDtUpdate = now;
-
-    sceneManager.update()
+    _deltaTime = now - _lastDtUpdate;
+    _lastDtUpdate = now;
+    _sceneManager.update()
 }, 10);
 
 
 (function animloop (timestamp) {
-    canvas.update();
-
-    sceneManager.draw(timestamp);
-
-    gameRunning && window.requestAnimationFrame(animloop, Canvas.canvas);
+    _canvas.update();
+    _sceneManager.draw(timestamp);
+    _gameRunning && window.requestAnimationFrame(animloop, Canvas.canvas);
 })();
 
 
-const gameOver = () => {
-    gameRunning = false;
+const deltaTime = () => _deltaTime;
 
+
+const time = () => Date.now() - _gameStartTime;
+
+
+const gameOver = () => {
+    _gameRunning = false;
     clearInterval(gameLoop);
 };

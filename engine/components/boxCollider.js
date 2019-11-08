@@ -66,7 +66,7 @@ class BoxCollider extends Collider {
 
             this._borderCollision && Collision.pushAway(canvasColl.axis, canvasColl.pos, this);
         }
-
+        
         collision && this._collide([collision, this, collidedObj]);
 
         return collision;

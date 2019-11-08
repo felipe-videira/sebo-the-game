@@ -4,11 +4,14 @@ class Player extends GameObject {
     _height;
     _colors;
     _life;
+
     _damageAmount = 25;
+    _damageRate = 1;
     _minLife = 0.01;
     _maxLife = 0.99;
-    _minDamage = 1;
-    _maxDamage = 100;
+    _minDamageTake = 1;
+    _maxDamageTake = 100;
+    _lastDamageTime = Infinity;
 
     constructor (name = "Player", { 
         x = 0,
@@ -53,7 +56,7 @@ class Player extends GameObject {
             })
         ])
 
-        this.getComponent('Collider').onCollision(coll => this._onCollision(coll));
+        this.getComponent('Collider').onCollision(params => this._onCollision(...params));
     }
 
     get lifeBarGradient () {
@@ -79,7 +82,7 @@ class Player extends GameObject {
     }
 
     damage (amount) {
-        this.life -= clamp(amount, this._minDamage, this._maxDamage) * 0.01
+        this.life -= clamp(amount, this._minDamageTake, this._maxDamageTake) * 0.01
     }
 
     onDeath (callback) {
@@ -106,9 +109,13 @@ class Player extends GameObject {
     _onCollision ({ a, b } = collision = {}, colliderA, colliderB) {
         if (!a || !b || !colliderA || !colliderB) return;
 
-        if (distance(b.axisA.x, b.axisA.y, b.axisB.x, b.axisB.y) === colliderB.xunit) {
-            console.log("aqui")
+        if (
+            distance(b.axisA.x, b.axisA.y, b.axisB.x, b.axisB.y) === colliderB.xunit &&
+            this._lastDamageTime >= time() + this._damageRate
+        ) {
             colliderB.user.damage(this._damageAmount);
+
+            this._lastDamageTime = time();
         }
     }
 }
