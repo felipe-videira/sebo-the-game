@@ -15,11 +15,7 @@ class Input extends MonoBehaviour {
         document.addEventListener("keyup", e => this._keyUpHandler(e), false);
 
         for (const key in gameConfig.inputs) {
-            this._input[gameConfig.inputs[key]] = {
-                x: 0,
-                y: 0,
-                rotation: 0
-            }
+            this._input[gameConfig.inputs[key]] = { x: 0, y: 0 }
         }
         
         return this;
@@ -57,11 +53,5 @@ class Input extends MonoBehaviour {
             
         if (gameConfig.inputKeys[input].down.includes(key)) 
             this._input[input].y = !isNullOrEmpty(valueToSet) ? valueToSet : -1;
-    
-        if (gameConfig.inputKeys[input].rotateUp.includes(key)) 
-            this._input[input].rotation = !isNullOrEmpty(valueToSet) ? valueToSet : 1;
-
-        if (gameConfig.inputKeys[input].rotateDown.includes(key)) 
-            this._input[input].rotation = !isNullOrEmpty(valueToSet) ? valueToSet : -1;
     }
 }

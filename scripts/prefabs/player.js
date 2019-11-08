@@ -5,13 +5,12 @@ class Player extends GameObject {
     _colors;
     _life;
 
-    _damageAmount = 25;
-    _damageRate = 1;
+    _damageAmount = 10;
     _minLife = 0.01;
     _maxLife = 0.99;
     _minDamageTake = 1;
     _maxDamageTake = 100;
-    _lastDamageTime = Infinity;
+    _minVelocityForDamage = 1;
 
     constructor (name = "Player", { 
         x = 0,
@@ -76,7 +75,7 @@ class Player extends GameObject {
     set life (v) {
         this._life = this._validateLife(v);
 
-        if (this._life === this._minLife) this._die(); 
+        if (this._life <= this._minLife) this._die(); 
         
         this._updateLifeBar();
     }
@@ -106,16 +105,16 @@ class Player extends GameObject {
         return clamp(v, this._minLife, this._maxLife);
     }
 
-    _onCollision ({ a, b } = collision = {}, colliderA, colliderB) {
-        if (!a || !b || !colliderA || !colliderB) return;
+    _onCollision ({ a, b } = {}, other) {
+        if (!a || !b || !other) return;
 
+        const { velocity } = this.getComponent("Rigidbody");
+        const speed = magnitude(velocity.x, velocity.y);
         if (
-            distance(b.axisA.x, b.axisA.y, b.axisB.x, b.axisB.y) === colliderB.xunit &&
-            this._lastDamageTime >= time() + this._damageRate
+            speed >= this._minVelocityForDamage &&
+            distance(b.axisA.x, b.axisA.y, b.axisB.x, b.axisB.y) === other.xunit
         ) {
-            colliderB.user.damage(this._damageAmount);
-
-            this._lastDamageTime = time();
+            other.user.damage(this._damageAmount);
         }
     }
 }

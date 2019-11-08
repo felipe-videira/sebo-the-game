@@ -80,7 +80,11 @@ class SceneManager extends MonoBehaviour {
     }
 
     static reloadActiveScene () {
-        this.instance._scenes[this._activeSceneName].start();
+        const activeScene = this.instance._scenes[this.instance._activeSceneName];
+
+        if (!activeScene) return;
+
+        this.instance._scenes[this.instance._activeSceneName] = new activeScene.constructor();
     }
 
     static removeScene (sceneName) {
