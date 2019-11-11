@@ -78,6 +78,14 @@ class GameObject extends MonoBehaviour {
         }
     }
 
+    destroy () {
+        for (const componentName in this._components) {
+            this._components[componentName].destroy();
+        }
+
+        super.destroy();
+    }
+
     addComponents (componentsOrCallback) {
         for (const component of this._validateComponents(componentsOrCallback)) {
             this.addComponent(component);

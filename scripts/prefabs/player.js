@@ -59,13 +59,13 @@ class Player extends GameObject {
     }
 
     get lifeBarGradient () {
-        const gradient = -Math.abs(this.transform.x - (this._width * this.life));
-        return [
-            gradient - 1, 
-            0, 
-            gradient, 
-            0
-        ];
+        const { x, y, rotation } = this.transform
+
+        const { x: rotX } = Collision.rotatePoint(x + (this._width / 2), y + (this._height / 2), x, y, rotation);
+
+        const gradient = -Math.abs(rotX - (this._width * this.life));
+        
+        return [gradient - 1, 0, gradient, 0];
     }
 
     get life () {

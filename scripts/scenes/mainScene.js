@@ -64,6 +64,7 @@ class MainScene extends Scene {
     }
 
     restart () {
+        this.clear();
         this.start();
     }
 
@@ -83,9 +84,11 @@ class MainScene extends Scene {
     }
 
     _onPlayerDeath (tag) {
+        if (this._alivePlayers.length < 1) return;
+
         this._alivePlayers.pop(tag);
         
-        this._alivePlayers.length <= 1 && this._endGame();
+        this._alivePlayers.length === 1 && this._endGame();
     }
 
     _endGame () {

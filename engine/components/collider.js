@@ -62,6 +62,12 @@ class Collider extends Component {
 
         Collision.subscribeCollider(this);
     }
+    
+    destroy () {
+        Collision.unsubscribeCollider(this);
+
+        super.destroy();
+    }
 
     detectCollision (other) {
         throw Error("The method detectCollision must be implemented!");

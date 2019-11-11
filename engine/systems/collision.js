@@ -33,6 +33,11 @@ class Collision extends MonoBehaviour {
         this.instance._colliders[collider.uuid] = collider;
     }
     
+
+    static unsubscribeCollider ({ uuid }) {
+        delete this.instance._colliders[uuid];
+    }
+    
     static boxCollision (
         { aX,  aY,  aWidth,  aHeight,  bX,  bY,  bWidth,  bHeight } = {}, 
         drawCollider = false, 
@@ -167,6 +172,15 @@ class Collision extends MonoBehaviour {
         go.rigidbody.addForce(x * -m, y * -m);
     }
 
+    static rotatePoint(cx, cy, x, y, angle) {
+        const cos = Math.cos(angle),
+            sin = Math.sin(angle),
+            nx = (cos * (x - cx)) + (sin * (y - cy)) + cx,
+            ny = (cos * (y - cy)) - (sin * (x - cx)) + cy;
+
+        return { cx, cy, x: nx, y: ny };
+    }
+
     _validateCollider (v) {
         if (!v && !v.isCollider) {
             throw Error("You are tring to add something that is not a Collider!");
@@ -192,10 +206,10 @@ class Collision extends MonoBehaviour {
             const cy = y + (height / 2)
             rotation = -rotation
             return [
-                this._rotate(cx, cy, x, y, rotation),
-                this._rotate(cx, cy, x, y + height, rotation),
-                this._rotate(cx, cy, x + width, y + height, rotation),
-                this._rotate(cx, cy, x + width, y, rotation),
+                Collision.rotatePoint(cx, cy, x, y, rotation),
+                Collision.rotatePoint(cx, cy, x, y + height, rotation),
+                Collision.rotatePoint(cx, cy, x + width, y + height, rotation),
+                Collision.rotatePoint(cx, cy, x + width, y, rotation),
             ]
         }
         // needs to be tested
@@ -209,7 +223,7 @@ class Collision extends MonoBehaviour {
         return points
     }
 
-    _rotate(cx, cy, x, y, angle) {
+    rotate(cx, cy, x, y, angle) {
         const cos = Math.cos(angle),
             sin = Math.sin(angle),
             nx = (cos * (x - cx)) + (sin * (y - cy)) + cx,

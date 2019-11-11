@@ -44,6 +44,14 @@ class Scene extends MonoBehaviour {
     restart () {
         throw Error('This method must be implemented');
     }
+    
+    destroy () {
+        for (const name in this._monoBehaviours) {
+            this._monoBehaviours[name].destroy();
+        }
+
+        super.destroy();
+    }
 
     draw (timestamp) {
         super.draw(timestamp);
@@ -75,7 +83,11 @@ class Scene extends MonoBehaviour {
         return monoBehaviour.active && monoBehaviour;
     }
 
-    cleanMonoBehaviours () {
+    clear () {
+        for (const name in this._monoBehaviours) {
+            this._monoBehaviours[name].destroy();
+        }
+
         this._monoBehaviours = {}
     }
 
