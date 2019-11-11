@@ -41,7 +41,7 @@ class MainScene extends Scene {
         for (const player of this._players) {
             const tag = `Player${index + 1}`;
 
-            this.addMonoBehaviours(new Player(name, {
+            this.addMonoBehaviour(new Player(tag, {
                 x: player.x,
                 y: player.y,
                 rotation: player.rotation,

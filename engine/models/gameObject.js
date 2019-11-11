@@ -33,7 +33,7 @@ class GameObject extends MonoBehaviour {
     get name () {
         if (this._name) return this._name;
 
-        throw Error("This Scene does not have a name!");
+        throw Error("This Game Object does not have a name!");
     }
 
     get isGameObject () {
