@@ -81,6 +81,7 @@ class Canvas extends MonoBehaviour {
     }
 
     static createButton({
+        id,
         x = this.center.x,
         y = this.center.y,
         text = "",
@@ -97,42 +98,24 @@ class Canvas extends MonoBehaviour {
         opacity = 1,
         borderColor = null,
         borderWidth = 0, 
-    }, onClick = null) {
-        Canvas.createBox({ 
-            x,  
-            y, 
-            rotation, 
-            width, 
-            height, 
-            color: background, 
-            gradient, 
-            opacity, 
-            borderColor, 
-            borderWidth 
-        });
-        Canvas.displayText({ 
-            x: x + width / 2, 
-            y: y + height / 2 + fontSize / 4, 
-            text, 
-            fontSize, 
-            font, 
-            type, 
-            color, textAlign 
-        });
+    }, onClick = null, onHover = null) {
+        Canvas.createBox({ x,  y, rotation, width, height, color: background, gradient, opacity, borderColor, borderWidth });
+        Canvas.displayText({ x: x + width / 2, y: y + height / 2 + fontSize / 4, text, fontSize, font, type, color, textAlign });
+        
+        //TODO: improve this
         onClick && this.instance._mainCanvas.addEventListener('click', e => {
             const mouse = this.instance._getMousePos(this.instance._mainCanvas, e);
-            if (Collision.boxCollision({
-                aX: mouse.x,
-                aY: mouse.y,
-                aHeight: 10,
-                aWidth: 10,
-                bX: x,
-                bY: y,
-                bHeight: height,
-                bWidth: width
-            })) {
+            if (Collision.boxCollision({ aX: mouse.x, aY: mouse.y, aHeight: 10, aWidth: 10, bX: x, bY: y, bHeight: height, bWidth: width })) {
                 onClick();
             }
+        }, false);
+        onHover && this.instance._mainCanvas.addEventListener('mousemove', e => {
+            const mouse = this.instance._getMousePos(this.instance._mainCanvas, e);
+            let hover;
+            if (Collision.boxCollision({ overlap: true, aX: mouse.x, aY: mouse.y, aHeight: 10, aWidth: 10, bX: x, bY: y, bHeight: height, bWidth: width })) {
+                hover = { id }
+            }
+            onHover(hover);
         }, false);
     }
 

@@ -16,6 +16,8 @@ class MonoBehaviour {
 
     setActive (v) {
         this._active = !!v; 
+         
+        this._active ? this.onEnable() : this.onDisable()
     }
 
     onDestroy(callback) {
@@ -25,6 +27,10 @@ class MonoBehaviour {
         this._onDestroy = callback;
     }
 
+    onEnable () {}
+
+    onDisable () {}
+
     start () {}
 
     update () {}
@@ -32,6 +38,8 @@ class MonoBehaviour {
     draw (timestamp) {}
     
     destroy () {
+        this.onDisable();
+        
         this._onDestroy && this._onDestroy();
 
         delete this;

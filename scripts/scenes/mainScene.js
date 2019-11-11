@@ -38,7 +38,11 @@ class MainScene extends Scene {
     get name () {
         return "MainScene";
     }
-    
+
+    onEnable () {
+        this._displayMessage('Fight!', 2000);
+    }
+
     restart() {
         this.clear();
   
@@ -75,8 +79,6 @@ class MainScene extends Scene {
 
             index++;
         }
-
-        this._displayMessage('Fight!', 2000);
     }
   
     _displayMessage (message, lifespan = 5000) {

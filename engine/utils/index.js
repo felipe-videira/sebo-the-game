@@ -1,5 +1,5 @@
 const isInput = v => 
-    !!Object.keys(gameConfig.inputs).find(key => v === gameConfig.inputs[key])
+    !!Object.keys(gameConfig.inputs).find(key => v === gameConfig.inputs[key]);
 
 const isNullOrEmpty = v => 
     v === null || 
@@ -26,7 +26,7 @@ const normalize = (x, y) => {
         x: x/d, 
         y: y/d 
     };
-}
+};
 
 const distance = (ax, ay, bx, by) => Math.sqrt((ax - bx) * (ax - bx) + (ay - by) * (ay - by));
 
@@ -44,4 +44,13 @@ const shadeColor = (color, percent) => {
     let GG = ((G.toString(16).length==1)?"0"+G.toString(16):G.toString(16));
     let BB = ((B.toString(16).length==1)?"0"+B.toString(16):B.toString(16));
     return "#"+RR+GG+BB;
-}
+};
+
+const lerp = (start, end, t) => {
+    return start * (1 - t) + end * t
+};
+
+const invlerp = (a, b, v) => {
+    return clamp((v - a) / (b - a), 0, 1);
+};
+  
