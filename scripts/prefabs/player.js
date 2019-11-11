@@ -53,19 +53,15 @@ class Player extends GameObject {
                 rotationSpeed,
                 input 
             })
-        ])
+        ]);
 
         this.getComponent('Collider').onCollision(params => this._onCollision(...params));
     }
 
     get lifeBarGradient () {
-        const { x, y, rotation } = this.transform
+        const size = (this._width / 2) - (this._width * this.life);
 
-        const { x: rotX } = Collision.rotatePoint(x + (this._width / 2), y + (this._height / 2), x, y, rotation);
-
-        const gradient = -Math.abs(rotX - (this._width * this.life));
-        
-        return [gradient - 1, 0, gradient, 0];
+        return [size - 1, 0, size, 0];
     }
 
     get life () {
@@ -76,12 +72,18 @@ class Player extends GameObject {
         this._life = this._validateLife(v);
 
         if (this._life <= this._minLife) this._die(); 
-        
+
         this._updateLifeBar();
     }
 
+    _updateLifeBar () {
+        if (!this.getComponent("Box")) return;
+            
+        this.getComponent("Box").gradient = this.lifeBarGradient;
+    }
+
     damage (amount) {
-        this.life -= clamp(amount, this._minDamageTake, this._maxDamageTake) * 0.01
+        this.life -= clamp(amount, this._minDamageTake, this._maxDamageTake) * 0.01;
     }
 
     onDeath (callback) {
@@ -95,12 +97,6 @@ class Player extends GameObject {
         this.setActive(false);
         
         this._onDeath && this._onDeath();
-    }
-
-    _updateLifeBar () {
-        if (!this.getComponent("Box")) return;
-        
-        this.getComponent("Box").gradient = this.lifeBarGradient;
     }
 
     _validateLife (v) {

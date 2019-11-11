@@ -39,7 +39,7 @@ class MainScene extends Scene {
 
         let index = 0;
         for (const player of this._players) {
-            const tag = `Player${index + 1}`;
+            const tag = `Player_${index + 1}`;
 
             this.addMonoBehaviour(new Player(tag, {
                 x: player.x,
@@ -74,7 +74,7 @@ class MainScene extends Scene {
         this._message && Canvas.displayText({ 
             message: this._message,
             color: "#fff"
-        })
+        });
     }
   
     _displayMessage (message, lifespan = 5000) {
@@ -92,7 +92,7 @@ class MainScene extends Scene {
     }
 
     _endGame () {
-        this._displayMessage(`${this._alivePlayers[0]} wins!`, 2000);
+        this._displayMessage(`${this._alivePlayers[0].replace('_', ' ')} wins!`, 2000);
 
         setTimeout(() => SceneManager.reloadActiveScene(), 2500);
     }

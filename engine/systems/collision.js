@@ -222,12 +222,4 @@ class Collision extends MonoBehaviour {
         }
         return points
     }
-
-    rotate(cx, cy, x, y, angle) {
-        const cos = Math.cos(angle),
-            sin = Math.sin(angle),
-            nx = (cos * (x - cx)) + (sin * (y - cy)) + cx,
-            ny = (cos * (y - cy)) - (sin * (x - cx)) + cy;
-        return { cx, cy, x: nx, y: ny };
-    }
 }

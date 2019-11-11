@@ -140,15 +140,14 @@ class Canvas extends MonoBehaviour {
         this.instance._ctx.save();
         this.instance._ctx.beginPath();
         this.instance._ctx.translate(x + width / 2, y + height / 2);
-        this.instance._ctx.rotate(rotation);
-        this.instance._ctx.rect(-width / 2, -height / 2, width, height);
         if (Array.isArray(color)) {
             if (!gradient) gradient = [0, 0, width / 2, 0];
             color = this.instance._createGradient(color, gradient);
         }
         this.instance._ctx.fillStyle = color;
         this.instance._ctx.globalAlpha = opacity; 
-        this.instance._ctx.fill();
+        this.instance._ctx.rotate(rotation);
+        this.instance._ctx.fillRect(-width / 2, -height / 2, width, height);
         if (borderColor) {
             this.instance._ctx.strokeStyle = borderColor;
             this.instance._ctx.lineWidth = borderWidth;
