@@ -1,3 +1,7 @@
-SceneManager.addScene(new MainScene(), true);
+SceneManager.addScenes([
+    new MenuScene(), 
+    new MainScene(),
+    new OptionsScene(),
+]);
 
-Canvas.flipTheme();
+SceneManager.setSceneActive('MenuScene');

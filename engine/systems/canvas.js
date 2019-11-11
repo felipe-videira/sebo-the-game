@@ -65,19 +65,75 @@ class Canvas extends MonoBehaviour {
     }
 
     static displayText ({
-        message = "",
+        text = "",
         x = this.center.x,
         y = this.center.y,
-        size = 30,
+        fontSize = 30,
         font = 'Arial',
         type = 'fill' || 'stroke',
         color = "#000",
         textAlign = "center"
     }) {
-        this.instance._ctx.font = `${size}px ${font}`;
+        this.instance._ctx.font = `${fontSize}px ${font}`;
         this.instance._ctx.fillStyle = color;
         this.instance._ctx.textAlign = textAlign;
-        this.instance._ctx[`${type}Text`](message, x, y);
+        this.instance._ctx[`${type}Text`](text, x, y);
+    }
+
+    static createButton({
+        x = this.center.x,
+        y = this.center.y,
+        text = "",
+        fontSize = 30,
+        font = 'Arial',
+        type = 'fill' || 'stroke',
+        color = "#000",
+        textAlign = "center",
+        rotation = 0,
+        width = 10, 
+        height = 10,
+        background = "#000",
+        gradient = null,
+        opacity = 1,
+        borderColor = null,
+        borderWidth = 0, 
+    }, onClick = null) {
+        Canvas.createBox({ 
+            x,  
+            y, 
+            rotation, 
+            width, 
+            height, 
+            color: background, 
+            gradient, 
+            opacity, 
+            borderColor, 
+            borderWidth 
+        });
+        Canvas.displayText({ 
+            x: x + width / 2, 
+            y: y + height / 2 + fontSize / 4, 
+            text, 
+            fontSize, 
+            font, 
+            type, 
+            color, textAlign 
+        });
+        onClick && this.instance._mainCanvas.addEventListener('click', e => {
+            const mouse = this.instance._getMousePos(this.instance._mainCanvas, e);
+            if (Collision.boxCollision({
+                aX: mouse.x,
+                aY: mouse.y,
+                aHeight: 10,
+                aWidth: 10,
+                bX: x,
+                bY: y,
+                bHeight: height,
+                bWidth: width
+            })) {
+                onClick();
+            }
+        }, false);
     }
 
     static createLine ({
@@ -197,12 +253,18 @@ class Canvas extends MonoBehaviour {
         this.instance._ctx.restore();
     }
 
-    _createGradient(colors, gradient) {
+    _createGradient (colors, gradient) {
         const grd = this._ctx.createLinearGradient(...gradient);
         for (const { value, stop } of colors) {
             grd.addColorStop(stop, value)
         }
         return grd;
+    }
+
+    _getMousePos (canvas, { clientX, clientY }) {
+        const { left, top } = canvas.getBoundingClientRect();
+        
+        return { x: clientX - left, y: clientY - top };
     }
 }
 
