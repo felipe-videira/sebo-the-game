@@ -56,13 +56,28 @@ class Canvas extends MonoBehaviour {
             y: (this.instance._mainCanvas.height / 2) - (elHeight / 2),
         }
     }
-
     
     static flipTheme () {
         this.instance._canvasBackground = 
             this.instance._canvasBackground === this.instance._lightTheme 
                 ? this.instance._darkTheme
                 : this.instance._lightTheme; 
+    }
+
+    static displayText ({
+        message = "",
+        x = this.center.x,
+        y = this.center.y,
+        size = 30,
+        font = 'Arial',
+        type = 'fill' || 'stroke',
+        color = "#000",
+        textAlign = "center"
+    }) {
+        this.instance._ctx.font = `${size}px ${font}`;
+        this.instance._ctx.fillStyle = color;
+        this.instance._ctx.textAlign = textAlign;
+        this.instance._ctx[`${type}Text`](message, x, y);
     }
 
     static createLine ({

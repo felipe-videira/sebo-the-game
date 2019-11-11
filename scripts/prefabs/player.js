@@ -10,7 +10,7 @@ class Player extends GameObject {
     _maxLife = 0.99;
     _minDamageTake = 1;
     _maxDamageTake = 100;
-    _minVelocityForDamage = 1;
+    _minVelocityForDamage = 0.5;
 
     constructor (name = "Player", { 
         x = 0,
@@ -59,7 +59,7 @@ class Player extends GameObject {
     }
 
     get lifeBarGradient () {
-        const gradient = this.transform.x - (this._width * this.life);
+        const gradient = -Math.abs(this.transform.x - (this._width * this.life));
         return [
             gradient - 1, 
             0, 
@@ -92,12 +92,14 @@ class Player extends GameObject {
     }
 
     _die () {
+        this.setActive(false);
+        
         this._onDeath && this._onDeath();
     }
 
     _updateLifeBar () {
         if (!this.getComponent("Box")) return;
-
+        
         this.getComponent("Box").gradient = this.lifeBarGradient;
     }
 

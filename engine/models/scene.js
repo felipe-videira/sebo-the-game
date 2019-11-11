@@ -41,6 +41,10 @@ class Scene extends MonoBehaviour {
         }
     }
 
+    restart () {
+        throw Error('This method must be implemented');
+    }
+
     draw (timestamp) {
         super.draw(timestamp);
         
