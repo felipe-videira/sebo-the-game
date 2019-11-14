@@ -41,17 +41,40 @@ class MenuScene extends Scene {
     get name () {
         return "MenuScene";
     }
+
+    start () {
+        this.addMonoBehaviours([
+            new Button({
+                id: 'playButton',
+                text: 'play',
+                background: '#e04343',
+                y: Canvas.center.y + 50,
+                x: Canvas.center.x - 75,
+                rotation: 0,
+                color: '#fff',
+                fontSize: 18,
+                height: 25,
+                width: 150,
+            })
+        ])
+
+        this.getMonoBehaviour('playButton') // here
+    }
+
+    restart() {
+        return;
+    }
     
     draw () {
         super.draw();
 
         Canvas.displayText(this._title);
 
-        Canvas.createButton(
-            this._playButton, 
-            () => this._play(), 
-            (e) => this._buttonHover(e, this._playButton, -this._flipDegrees)
-        );
+        // Canvas.createButton(
+        //     this._playButton, 
+        //     () => this._play(), 
+        //     (e) => this._buttonHover(e, this._playButton, -this._flipDegrees)
+        // );
 
         Canvas.createButton(
             this._optionsButton, 

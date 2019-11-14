@@ -35,7 +35,7 @@ class Button extends MonoBehaviour {
        height = 25,
        width = 150,
     } = {}) {
-        super("Button"); 
+        super(); 
 
         this._id = id;
         this._text = text;
@@ -47,6 +47,10 @@ class Button extends MonoBehaviour {
         this._fontSize = fontSize;
         this._height = height;
         this._width = width;
+    }
+    
+    get name () {
+        return this._id;
     }
 
     draw (timestamp) {
@@ -72,12 +76,50 @@ class Button extends MonoBehaviour {
         this._animate();
     }
 
+    onClick(callback) {
+        if (typeof callback !== 'function') 
+            throw Error("this is not a function");
+            
+        this._onClick = callback;
+
+        return this;
+    }
+
+    onHover(callback) {
+        if (typeof callback !== 'function') 
+            throw Error("this is not a function");
+
+        this._onHover = callback;
+
+        return this;
+    }
+
+    onFocus (callback) {
+        if (typeof callback !== 'function') 
+            throw Error("this is not a function");
+
+        this._onFocus = callback;
+
+        return this;
+    }
+
+    onBlur (callback) {
+        if (typeof callback !== 'function') 
+            throw Error("this is not a function");
+
+        this._onBlur = callback;
+
+        return this;
+    }
+
     animate (targetValues, speed = 1) {
         if (!Object.keys(targetValues).length) return
 
         this._targetAnimValues = targetValues;
         this._animSpeed = speed;
         this._animProgress = {};
+
+        return this;
     }
 
     _animate () {
@@ -93,34 +135,6 @@ class Button extends MonoBehaviour {
             this[property] = 
                 lerp(this[property], this._targetAnimValues[property], this._animProgress[property]);
         }
-    }
-
-    onClick(callback) {
-        if (typeof callback !== 'function') 
-            throw Error("this is not a function");
-            
-        this._onClick = callback;
-    }
-
-    onHover(callback) {
-        if (typeof callback !== 'function') 
-            throw Error("this is not a function");
-
-        this._onHover = callback;
-    }
-
-    onFocus (callback) {
-        if (typeof callback !== 'function') 
-            throw Error("this is not a function");
-
-        this._onFocus = callback;
-    }
-
-    onBlur (callback) {
-        if (typeof callback !== 'function') 
-            throw Error("this is not a function");
-
-        this._onBlur = callback;
     }
 
     _click () {
