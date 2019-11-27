@@ -1,5 +1,8 @@
 class OptionsScene extends Scene {
 
+    _flipDegrees = -6;
+    _animationSpeed = 1;
+
     get name () {
         return "OptionsScene";
     }
@@ -8,7 +11,7 @@ class OptionsScene extends Scene {
         this.addMonoBehaviours([
             new GUIText({
                 text: 'In progress ;)',
-                fontSize: 20,
+                fontSize: 25,
             }),
 
             new GUIButton({
@@ -34,11 +37,18 @@ class OptionsScene extends Scene {
     }
 
     _onButtonHover (button, focused = true) {
-        button.animate({ 
-            color: focused ? '#ffffff' : '#f3f3f3',
-            fontSize: focused ? 19 : 18,
-            height: focused ? 35 : 25,
-            width: focused ? 160 : 150,
-        }, 1)
+        if (focused && button.rotation !== degToRad(this._flipDegrees)) {
+            button.animate({ 
+                rotation: degToRad(this._flipDegrees),
+                color: '#ffffff',
+                fontSize: 19,
+            }, this._animationSpeed)
+        } else if (!focused && button.rotation !== 0) {
+            button.animate({ 
+                rotation: 0,
+                color: '#f3f3f3',
+                fontSize: 18,
+            }, this._animationSpeed)
+        } 
     }
 }
