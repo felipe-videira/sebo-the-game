@@ -1,42 +1,7 @@
 class MenuScene extends Scene {
 
-    _title = { 
-        text: 'TEST',
-        fontSize: 50,
-    };
-
-    _playButton = { 
-        id: 'playButton',
-        text: 'play',
-        background: '#e04343',
-        y: Canvas.center.y + 50,
-        x: Canvas.center.x - 75,
-        rotation: 0,
-        color: '#fff',
-        fontSize: 18,
-        height: 25,
-        width: 150,
-    };
-
-    _optionsButton = { 
-        id: 'optionsButton',
-        text: 'options',
-        background: '#0095DD',
-        y: Canvas.center.y + 100,
-        x: Canvas.center.x - 75,
-        rotation: 0,
-        color: '#fff',
-        fontSize: 18,
-        height: 25,
-        width: 150,
-    };
-
     _flipDegrees = 7;
     _animationSpeed = 1;
-    _buttonInAnimation = null;
-    _targetRotation = null;
-    _animProgress = 0;
-
 
     get name () {
         return "MenuScene";
@@ -44,47 +9,49 @@ class MenuScene extends Scene {
 
     start () {
         this.addMonoBehaviours([
-            new Button({
+            new GUIText({
+                text: 'SEBO',
+                fontSize: 50,
+            }),
+
+            new GUIButton({
                 id: 'playButton',
                 text: 'play',
                 background: '#e04343',
                 y: Canvas.center.y + 50,
                 x: Canvas.center.x - 75,
                 rotation: 0,
-                color: '#fff',
+                color: '#f3f3f3',
                 fontSize: 18,
                 height: 25,
                 width: 150,
             })
-        ])
+            .onFocus(button => this._onButtonHover(button, this._flipDegrees, true))
+            .onBlur(button => this._onButtonHover(button, this._flipDegrees, false))
+            .onClick(() => this._play()),
 
-        this.getMonoBehaviour('playButton') // here
+            new GUIButton({
+                id: 'optionsButton',
+                text: 'options',
+                background: '#0095DD',
+                y: Canvas.center.y + 100,
+                x: Canvas.center.x - 75,
+                rotation: 0,
+                color: '#f3f3f3',
+                fontSize: 18,
+                height: 25,
+                width: 150,
+            })
+            .onFocus(button => this._onButtonHover(button, -this._flipDegrees, true))
+            .onBlur(button => this._onButtonHover(button, -this._flipDegrees, false))
+            .onClick(() => this._options()),
+        ])
     }
 
     restart() {
         return;
     }
     
-    draw () {
-        super.draw();
-
-        Canvas.displayText(this._title);
-
-        // Canvas.createButton(
-        //     this._playButton, 
-        //     () => this._play(), 
-        //     (e) => this._buttonHover(e, this._playButton, -this._flipDegrees)
-        // );
-
-        Canvas.createButton(
-            this._optionsButton, 
-            () => this._options(), 
-            (e) => this._buttonHover(e, this._optionsButton)
-        );
-
-        this._animateButton();
-    }
-
     _play () {
         SceneManager.setSceneActive('MainScene');
     }
@@ -93,32 +60,19 @@ class MenuScene extends Scene {
         SceneManager.setSceneActive('OptionsScene');
     }
 
-    _buttonHover (e = {}, button, degrees = this._flipDegrees) {
-        if (e.id && button.rotation !== degToRad(degrees)) {
-            this._targetRotation = degToRad(degrees); 
-            this._buttonInAnimation = button;
-        } else if (!e.id && button.rotation !== 0) {
-            this._targetRotation = 0; 
-            this._buttonInAnimation = button;
-        } else {
-            this._animProgress = 0;
-            this._buttonInAnimation = null;
-        }
-    }
-
-    _animateButton () {
-        if (this._buttonInAnimation) {
-            this._buttonInAnimation.rotation = 
-                lerp(
-                    this._buttonInAnimation.rotation, 
-                    this._targetRotation, 
-                    this._animProgress += this._animationSpeed * 0.1
-                );
-
-            if (this._animProgress >= 1) {
-                this._animProgress = 0;
-            }
+    _onButtonHover (button, degrees = this._flipDegrees, focused = true) {
+        if (focused && button.rotation !== degToRad(degrees)) {
+            button.animate({ 
+                rotation: degToRad(degrees),
+                color: '#ffffff',
+                fontSize: 19,
+            }, this._animationSpeed)
+        } else if (!focused && button.rotation !== 0) {
+            button.animate({ 
+                rotation: 0,
+                color: '#f3f3f3',
+                fontSize: 18,
+            }, this._animationSpeed)
         } 
     }
-   
 }

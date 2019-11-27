@@ -1,8 +1,5 @@
-class Button extends MonoBehaviour {
+class GUIButton extends GUI {
 
-    _y;
-    _x;
-    _id;
     _text;
     _background;
     _rotation;
@@ -15,13 +12,8 @@ class Button extends MonoBehaviour {
     _onHover;
     _onFocus;
     _onBlur;
-
-    _targetAnimValues;
-    _animSpeed;
-
     _focused = false;
 
-    _animProgress = {};
 
     constructor ({ 
        id,
@@ -37,7 +29,7 @@ class Button extends MonoBehaviour {
     } = {}) {
         super(); 
 
-        this._id = id;
+        if (id) this._id = id;
         this._text = text;
         this._background = background;
         this._y = y;
@@ -49,10 +41,6 @@ class Button extends MonoBehaviour {
         this._width = width;
     }
     
-    get name () {
-        return this._id;
-    }
-
     draw (timestamp) {
         super.draw(timestamp); 
         
@@ -70,10 +58,8 @@ class Button extends MonoBehaviour {
                 width: this._width,
             }, 
             () => this._click(), 
-            (e) => this._hover(e)
+            e => this._hover(e)
         );
-
-        this._animate();
     }
 
     onClick(callback) {
@@ -105,53 +91,28 @@ class Button extends MonoBehaviour {
 
     onBlur (callback) {
         if (typeof callback !== 'function') 
-            throw Error("this is not a function");
+            throw Error("onBlur callback must be a function");
 
         this._onBlur = callback;
 
         return this;
     }
 
-    animate (targetValues, speed = 1) {
-        if (!Object.keys(targetValues).length) return
-
-        this._targetAnimValues = targetValues;
-        this._animSpeed = speed;
-        this._animProgress = {};
-
-        return this;
-    }
-
-    _animate () {
-        if (!Object.keys(_targetAnimValues).length) return
-
-        for (const property in this._targetAnimValues) {
-            if (!this._animProgress[property] || this._animProgress[property] >= 1) {
-                this._animProgress[property] = 0;
-            }
-
-            this._animProgress[property] += this._animSpeed * 0.1
-
-            this[property] = 
-                lerp(this[property], this._targetAnimValues[property], this._animProgress[property]);
-        }
-    }
-
     _click () {
-        this._onClick && this._onClick(e);
+        this._onClick && this._onClick(this);
     }
 
     _hover (e = {}) {
-        this._onHover && this._onHover(e);
+        this._onHover && this._onHover(this);
         
         if (e.id && !this._focused) {
-            _focused = true;
+            this._focused = true;
 
-            this._onFocus && this._onFocus(e);
+            this._onFocus && this._onFocus(this);
         } else if (!e.id && this._focused) {
-            _focused = false;
+            this._focused = false;
 
-            this.onBlur && this.onBlur(e);
+            this._onBlur && this._onBlur(this);
         }
     }
 }
