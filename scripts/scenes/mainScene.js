@@ -29,33 +29,20 @@ class MainScene extends Scene {
     _alivePlayers = [];
     _message;
 
-    constructor () {
-        super();
-
-        this._init();
-    }
 
     get name () {
         return "MainScene";
     }
 
     onEnable () {
+        super.onEnable();
+
         this._displayMessage('Fight!', 2000);
     }
 
-    restart() {
-        this.clear();
-  
-        this._init();
-    }
-
-    draw () {
-        super.draw();
+    start () {
+        super.start();
         
-        this._message && Canvas.displayText({ text: this._message });
-    }
-
-    _init () {
         let index = 0;
 
         for (const player of this._players) {
@@ -79,6 +66,12 @@ class MainScene extends Scene {
 
             index++;
         }
+    }
+
+    draw () {
+        super.draw();
+        
+        this._message && Canvas.displayText({ text: this._message });
     }
   
     _displayMessage (message, lifespan = 5000) {

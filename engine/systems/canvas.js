@@ -5,6 +5,7 @@ class Canvas extends MonoBehaviour {
     _canvasBackground = this._lightTheme;
     _mainCanvas;
     _ctx;
+    _listeners = {};
     
     constructor() {
         super();
@@ -29,13 +30,6 @@ class Canvas extends MonoBehaviour {
         return this._mainCanvas;
     }
 
-    update () {
-        super.update();
-
-        this._ctx.fillStyle = this._canvasBackground;
-        this._ctx.fillRect(0, 0, this._mainCanvas.width, this._mainCanvas.height);
-    }
-    
     static get dimensions () {
         return { 
             width: this.instance._mainCanvas.width,
@@ -48,6 +42,22 @@ class Canvas extends MonoBehaviour {
             x: this.instance._mainCanvas.width / 2,
             y: this.instance._mainCanvas.height / 2,
         }
+    }
+
+    update () {
+        super.update();
+
+        this._ctx.fillStyle = this._canvasBackground;
+        this._ctx.fillRect(0, 0, this._mainCanvas.width, this._mainCanvas.height);
+    }
+
+    static getMousePos (e) {
+        const { left, top } = this.instance._mainCanvas.getBoundingClientRect();
+        
+        return { 
+            x: e.clientX - left, 
+            y: e.clientY - top 
+        };
     }
 
     static calculateCenter (elWidth = null, elHeight = null) { 
@@ -80,43 +90,41 @@ class Canvas extends MonoBehaviour {
         this.instance._ctx[`${type}Text`](text, x, y);
     }
 
+    static addEventListener(eventName, callback) {
+        this.instance._mainCanvas.addEventListener(eventName, callback, false);
+    }
+
+    static removeEventListener(eventName, callback) {
+        this.instance._mainCanvas.removeEventListener(eventName, callback, false);
+    }
+
     static createButton({
-        id,
         x = this.center.x,
         y = this.center.y,
-        text = "",
         fontSize = 30,
+        width = 10, 
+        height = 10,
+        background = "#000",
+        text = "",
         font = 'Arial',
         type = 'fill' || 'stroke',
         color = "#000",
         textAlign = "center",
         rotation = 0,
-        width = 10, 
-        height = 10,
-        background = "#000",
         gradient = null,
         opacity = 1,
         borderColor = null,
         borderWidth = 0, 
-    }, onClick = null, onHover = null) {
-        Canvas.createBox({ x,  y, rotation, width, height, color: background, gradient, opacity, borderColor, borderWidth });
-        Canvas.displayText({ x: x + width / 2, y: y + height / 2 + fontSize / 4, text, fontSize, font, type, color, textAlign });
-        
-        //TODO: improve this
-        onClick && this.instance._mainCanvas.addEventListener('click', e => {
-            const mouse = this.instance._getMousePos(this.instance._mainCanvas, e);
-            if (Collision.boxCollision({ aX: mouse.x, aY: mouse.y, aHeight: 10, aWidth: 10, bX: x, bY: y, bHeight: height, bWidth: width })) {
-                onClick();
-            }
-        }, false);
-        onHover && this.instance._mainCanvas.addEventListener('mousemove', e => {
-            const mouse = this.instance._getMousePos(this.instance._mainCanvas, e);
-            let hover;
-            if (Collision.boxCollision({ overlap: true, aX: mouse.x, aY: mouse.y, aHeight: 10, aWidth: 10, bX: x, bY: y, bHeight: height, bWidth: width })) {
-                hover = { id }
-            }
-            onHover(hover);
-        }, false);
+    }) {
+        Canvas.createBox({ 
+            color: background, 
+            x, y, rotation, width, height, gradient, opacity, borderColor, borderWidth 
+        });
+        Canvas.displayText({ 
+            x: x + width / 2,
+            y: y + height / 2 + fontSize / 4,
+            text, fontSize, font, type, color, textAlign 
+        });
     }
 
     static createLine ({
@@ -242,12 +250,6 @@ class Canvas extends MonoBehaviour {
             grd.addColorStop(stop, value)
         }
         return grd;
-    }
-
-    _getMousePos (canvas, { clientX, clientY }) {
-        const { left, top } = canvas.getBoundingClientRect();
-        
-        return { x: clientX - left, y: clientY - top };
     }
 }
 

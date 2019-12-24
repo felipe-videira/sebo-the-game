@@ -31,7 +31,9 @@ class MonoBehaviour {
 
     onDisable () {}
 
-    start () {}
+    start () {
+        this.onEnable()
+    }
 
     update () {}
 

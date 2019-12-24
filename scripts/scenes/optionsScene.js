@@ -7,7 +7,9 @@ class OptionsScene extends Scene {
         return "OptionsScene";
     }
 
-    start () {
+    onEnable () {
+        super.onEnable();
+        
         this.addMonoBehaviours([
             new GUIText({
                 text: 'In progress ;)',

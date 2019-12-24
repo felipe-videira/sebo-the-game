@@ -8,6 +8,8 @@ class MenuScene extends Scene {
     }
 
     start () {
+        super.start();
+
         this.addMonoBehaviours([
             new GUIText({
                 text: 'SEBO',
@@ -48,10 +50,6 @@ class MenuScene extends Scene {
         ])
     }
 
-    restart() {
-        return;
-    }
-    
     _play () {
         SceneManager.setSceneActive('MainScene');
     }
