@@ -4,8 +4,8 @@ class Player extends GameObject {
     _height;
     _colors;
     _life;
+    _damageAmount;
 
-    _damageAmount = 10;
     _minLife = 0.01;
     _maxLife = 0.99;
     _minDamageTake = 1;
@@ -20,6 +20,7 @@ class Player extends GameObject {
         speed = 7, 
         rotationSpeed = 2,
         width = 75,
+        damage = 10,
         height = 10,
         input = gameConfig.inputs.p1,
         startLife = 1
@@ -28,6 +29,7 @@ class Player extends GameObject {
 
         this._width = width;
         this._height = height;
+        this._damageAmount = damage;
         
         this.life = startLife;
 

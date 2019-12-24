@@ -39,7 +39,7 @@ class Collision extends MonoBehaviour {
     }
     
     static boxCollision (
-        { aX,  aY,  aWidth,  aHeight,  bX,  bY,  bWidth,  bHeight } = {}, 
+        { aX,  aY,  aWidth,  aHeight,  bX,  bY,  bWidth,  bHeight, overlap = false } = {}, 
         drawCollider = false, 
     ) {
         if (drawCollider) Canvas.createBox({ 
@@ -50,11 +50,17 @@ class Collision extends MonoBehaviour {
             color: 'transparent', 
             borderColor: 'green' 
         });
-
-        return aX <= bX + bWidth &&
-            aX + aWidth >= bX &&
-            aY <= bY + bHeight &&
-            aY + aHeight >= bY;
+        if (overlap) {
+            return aX < bX + bWidth &&
+                aX + aWidth > bX &&
+                aY < bY + bHeight &&
+                aY + aHeight > bY;
+        } else {
+            return aX <= bX + bWidth &&
+                aX + aWidth >= bX &&
+                aY <= bY + bHeight &&
+                aY + aHeight >= bY;
+        }
     }
     
     static circleCollision (

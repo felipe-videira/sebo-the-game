@@ -27,8 +27,6 @@ class SceneManager extends MonoBehaviour {
         super.start();
         
         for (const name in this._scenes) {
-            if (!this._scenes[name].active) continue;
-            
             this._scenes[name].start();
         }
     }
@@ -64,7 +62,9 @@ class SceneManager extends MonoBehaviour {
         
         this.instance._scenes[scene.name] = scene;
 
-        if (active) this.setSceneActive(scene.name);
+        this.instance._scenes[scene.name].start();
+
+        active ? this.setSceneActive(scene.name) : this.instance._scenes[scene.name].setActive(false);
     }
     
     static setSceneActive (sceneName) {
@@ -76,7 +76,6 @@ class SceneManager extends MonoBehaviour {
         this.instance._activeSceneName = sceneName;
         
         this.instance._scenes[this.instance._activeSceneName].setActive(true);
-        this.instance._scenes[this.instance._activeSceneName].start();
     }
     
     static reloadActiveScene () {

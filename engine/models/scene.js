@@ -9,6 +9,8 @@ class Scene extends MonoBehaviour {
         this._name = name;
 
         mBsOrCallaback && this.addMonoBehaviours(mBsOrCallaback)
+
+        this.setActive(false);
     }
 
     get isScene () {
@@ -42,9 +44,18 @@ class Scene extends MonoBehaviour {
     }
 
     restart () {
-        throw Error('This method must be implemented');
+        this.clear();
+        this.start();
     }
     
+    setActive(v) {
+        for (const name in this._monoBehaviours) {
+            this._monoBehaviours[name].setActive(v);
+        }
+
+        super.setActive(v);
+    }
+
     destroy () {
         for (const name in this._monoBehaviours) {
             this._monoBehaviours[name].destroy();

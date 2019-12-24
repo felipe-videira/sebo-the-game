@@ -5,6 +5,7 @@ class Canvas extends MonoBehaviour {
     _canvasBackground = this._lightTheme;
     _mainCanvas;
     _ctx;
+    _listeners = {};
     
     constructor() {
         super();
@@ -29,13 +30,6 @@ class Canvas extends MonoBehaviour {
         return this._mainCanvas;
     }
 
-    update () {
-        super.update();
-
-        this._ctx.fillStyle = this._canvasBackground;
-        this._ctx.fillRect(0, 0, this._mainCanvas.width, this._mainCanvas.height);
-    }
-    
     static get dimensions () {
         return { 
             width: this.instance._mainCanvas.width,
@@ -48,6 +42,22 @@ class Canvas extends MonoBehaviour {
             x: this.instance._mainCanvas.width / 2,
             y: this.instance._mainCanvas.height / 2,
         }
+    }
+
+    update () {
+        super.update();
+
+        this._ctx.fillStyle = this._canvasBackground;
+        this._ctx.fillRect(0, 0, this._mainCanvas.width, this._mainCanvas.height);
+    }
+
+    static getMousePos (e) {
+        const { left, top } = this.instance._mainCanvas.getBoundingClientRect();
+        
+        return { 
+            x: e.clientX - left, 
+            y: e.clientY - top 
+        };
     }
 
     static calculateCenter (elWidth = null, elHeight = null) { 
@@ -65,19 +75,56 @@ class Canvas extends MonoBehaviour {
     }
 
     static displayText ({
-        message = "",
+        text = "",
         x = this.center.x,
         y = this.center.y,
-        size = 30,
+        fontSize = 30,
         font = 'Arial',
         type = 'fill' || 'stroke',
         color = "#000",
         textAlign = "center"
     }) {
-        this.instance._ctx.font = `${size}px ${font}`;
+        this.instance._ctx.font = `${fontSize}px ${font}`;
         this.instance._ctx.fillStyle = color;
         this.instance._ctx.textAlign = textAlign;
-        this.instance._ctx[`${type}Text`](message, x, y);
+        this.instance._ctx[`${type}Text`](text, x, y);
+    }
+
+    static addEventListener(eventName, callback) {
+        this.instance._mainCanvas.addEventListener(eventName, callback, false);
+    }
+
+    static removeEventListener(eventName, callback) {
+        this.instance._mainCanvas.removeEventListener(eventName, callback, false);
+    }
+
+    static createButton({
+        x = this.center.x,
+        y = this.center.y,
+        fontSize = 30,
+        width = 10, 
+        height = 10,
+        background = "#000",
+        text = "",
+        font = 'Arial',
+        type = 'fill' || 'stroke',
+        color = "#000",
+        textAlign = "center",
+        rotation = 0,
+        gradient = null,
+        opacity = 1,
+        borderColor = null,
+        borderWidth = 0, 
+    }) {
+        Canvas.createBox({ 
+            color: background, 
+            x, y, rotation, width, height, gradient, opacity, borderColor, borderWidth 
+        });
+        Canvas.displayText({ 
+            x: x + width / 2,
+            y: y + height / 2 + fontSize / 4,
+            text, fontSize, font, type, color, textAlign 
+        });
     }
 
     static createLine ({
@@ -197,7 +244,7 @@ class Canvas extends MonoBehaviour {
         this.instance._ctx.restore();
     }
 
-    _createGradient(colors, gradient) {
+    _createGradient (colors, gradient) {
         const grd = this._ctx.createLinearGradient(...gradient);
         for (const { value, stop } of colors) {
             grd.addColorStop(stop, value)

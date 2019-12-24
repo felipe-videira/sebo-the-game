@@ -1,9 +1,10 @@
 class MainScene extends Scene {
 
-    _pSpeed = 10
+    _pSpeed = 15
     _pRotationSpeed = 5;
     _pWidth = 75;
     _pHeight = 10;
+    _pDamage = 10;
     _players = [{
         color: "#0095DD",
         x: (Canvas.dimensions.width / 2) + this._pWidth * .25,
@@ -34,47 +35,44 @@ class MainScene extends Scene {
         return "MainScene";
     }
     
+    onEnable () {
+        super.onEnable();
+        
+        this._displayMessage('Fight!', 2000);
+    }
+
+
     start () {
         super.start();
+        
+        for (let i = 0; i < this._players.length; i++) {
+            const { x, y, color, rotation } = this._players[i];
 
-        let index = 0;
-        for (const player of this._players) {
-            const tag = `Player_${index + 1}`;
+            const tag = `Player_${i + 1}`;
 
             this.addMonoBehaviour(new Player(tag, {
-                x: player.x,
-                y: player.y,
-                rotation: player.rotation,
-                color: player.color,
+                x,
+                y,
+                rotation,
+                color,
                 height: this._pHeight,
                 width: this._pWidth,
+                damage: this._pDamage,
                 speed: this._pSpeed,
                 rotationSpeed: this._pRotationSpeed,
-                input: gameConfig.inputs[`p${index + 1}`],
+                input: gameConfig.inputs[`p${i + 1}`],
             }));
 
             this._alivePlayers.push(tag);
 
             this.getMonoBehaviour(tag).onDeath(() => this._onPlayerDeath(tag));
-
-            index++;
         }
-
-        this._displayMessage('Fight!', 2000);
-    }
-
-    restart () {
-        this.clear();
-        this.start();
     }
 
     draw () {
         super.draw();
         
-        this._message && Canvas.displayText({ 
-            message: this._message,
-            color: "#fff"
-        });
+        this._message && Canvas.displayText({ text: this._message });
     }
   
     _displayMessage (message, lifespan = 5000) {
