@@ -7,19 +7,18 @@ class MainScene extends Scene {
     _pDamage = 10;
     _players = [{
         tag: 'Player_1',
-        input: 'p1',
-        color: "#0095DD",
-        x: (Canvas.dimensions.width / 2) + this._pWidth * .25,
-        y: Canvas.dimensions.height - Canvas.dimensions.height / 4,
-        rotation: degToRad(180),
-    }, {
-        tag: 'Player_2',
         input: 'p2',
         color: "#e04343",
         x: (Canvas.dimensions.width / 2) - this._pWidth * 1.25,
         y: Canvas.dimensions.height / 4,
         rotation: 0,
-        
+    }, {
+        tag: 'Player_2',
+        input: 'p1',
+        color: "#0095DD",
+        x: (Canvas.dimensions.width / 2) + this._pWidth * .25,
+        y: Canvas.dimensions.height - Canvas.dimensions.height / 4,
+        rotation: degToRad(180),
     }, /* {
         tag: 'Player_3',
         input: 'p3',
@@ -84,11 +83,16 @@ class MainScene extends Scene {
         this.addMonoBehaviours([
             new GUIText({
                 id: 'ScoreText',
-                text: Object.keys(this._score).map(player => this._score[player]).join(' x '),
-                y: Canvas.center.y - (Canvas.center.y - 40),
-                size: 40
+                text: this._players.map((o, i) => ({
+                    text: `${this._score[o.tag]}`,
+                    color: o.color,
+                    fontSize: 30,
+                })),
+                y: Canvas.center.y - (Canvas.center.y - 30),
+                fontSize: 30,
+                separator: 'x',
             }),
-            new GUIText({ id: 'MessageText' }),
+            new GUIText({ id: 'MessageText', spacing: 7 }),
         ])
 
         this._displayMessage('Fight!', 2000);
@@ -119,7 +123,12 @@ class MainScene extends Scene {
     _endGame () {
         const [ lastPlayer ] = this._alivePlayers;
 
-        this._displayMessage(`${lastPlayer.replace('_', ' ')} wins!`, 2000);
+        this._displayMessage([{
+            text: lastPlayer.replace('_', ' '),
+            color: this._players.find(o => o.tag === lastPlayer).color
+        }, {
+            text: 'wins!'
+        }], 2000);
 
         setTimeout(() => this.restart(), 2500);
     }

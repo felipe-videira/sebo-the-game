@@ -6,17 +6,20 @@ class GUIText extends GUI {
     _type;
     _color;
     _textAlign;
+    _separator;
 
     constructor ({ 
         id,
-        text = "",
+        text = "" || [],
         y = Canvas.center.y,
         x = Canvas.center.x,
         fontSize = 30,
         color = "#000",
         font = 'Arial',
         type = 'fill' || 'stroke',
-        textAlign = "center"
+        textAlign = "center",
+        separator = null,
+        spacing = 8.5,
     } = {}) {
         super(); 
         
@@ -29,6 +32,8 @@ class GUIText extends GUI {
         this._font = font;
         this._type = type;
         this._textAlign = textAlign;
+        this._separator = separator;
+        this._spacing = spacing;
     }
     
     set text (v) {
@@ -47,6 +52,8 @@ class GUIText extends GUI {
             font: this._font,
             type: this._type,
             textAlign: this._textAlign,
+            separator: this._separator,
+            spacing: this._spacing,
         });
     }
 }

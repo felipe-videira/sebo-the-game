@@ -75,19 +75,67 @@ class Canvas extends MonoBehaviour {
     }
 
     static displayText ({
-        text = "",
+        text = "" || [],
         x = this.center.x,
         y = this.center.y,
         fontSize = 30,
         font = 'Arial',
         type = 'fill' || 'stroke',
         color = "#000",
-        textAlign = "center"
+        textAlign = "center",
+        separator = null,
+        spacing = 8.5,
     }) {
-        this.instance._ctx.font = `${fontSize}px ${font}`;
-        this.instance._ctx.fillStyle = color;
-        this.instance._ctx.textAlign = textAlign;
-        this.instance._ctx[`${type}Text`](text, x, y);
+        if (typeof text === 'string') {
+            this.instance._createText({ x, y, text, fontSize, font, type, color, textAlign });
+        } else if (Array.isArray(text)) {
+            let cursor = x;
+            text.forEach((o, i) => {
+                cursor += this.instance._createText({ 
+                    y,
+                    x: cursor, 
+                    text: o.text || text,
+                    fontSize: o.fontSize || fontSize,
+                    font: o.font || font,
+                    color: o.color || color,
+                    type: o.type || type,
+                    textAlign
+                });
+
+                cursor += spacing;
+
+                if (separator && i !== text.length - 1) {
+                    cursor += spacing + this.instance._createText({ 
+                        y,
+                        x: cursor, 
+                        text: separator,
+                        fontSize,
+                        font,
+                        color,
+                        type,
+                        textAlign
+                    });
+                }
+            })
+        }
+    }
+
+    _createText ({
+        fontSize,
+        font,
+        color,
+        textAlign,
+        text,
+        x, 
+        y,
+        type
+    }) {
+        this._ctx.font = `${fontSize}px ${font}`;
+        this._ctx.fillStyle = color;
+        this._ctx.textAlign = textAlign;
+        this._ctx[`${type}Text`](text, x, y);
+        
+        return this._ctx.measureText(text).width;
     }
 
     static addEventListener(eventName, callback) {
