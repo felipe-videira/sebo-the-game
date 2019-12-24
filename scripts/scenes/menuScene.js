@@ -17,7 +17,7 @@ class MenuScene extends Scene {
             }),
 
             new GUIButton({
-                id: 'playButton',
+                id: 'PlayButton',
                 text: 'play',
                 background: '#e04343',
                 y: Canvas.center.y + 50,
@@ -33,7 +33,7 @@ class MenuScene extends Scene {
             .onClick(() => this._play()),
 
             new GUIButton({
-                id: 'optionsButton',
+                id: 'OptionsButton',
                 text: 'options',
                 background: '#0095DD',
                 y: Canvas.center.y + 100,

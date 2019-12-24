@@ -31,6 +31,10 @@ class GUIText extends GUI {
         this._textAlign = textAlign;
     }
     
+    set text (v) {
+        this._text = v;
+    }
+
     draw (timestamp) {
         super.draw(timestamp); 
         

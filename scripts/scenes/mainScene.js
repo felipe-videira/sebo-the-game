@@ -6,30 +6,39 @@ class MainScene extends Scene {
     _pHeight = 10;
     _pDamage = 10;
     _players = [{
+        tag: 'Player_1',
+        input: 'p1',
         color: "#0095DD",
         x: (Canvas.dimensions.width / 2) + this._pWidth * .25,
         y: Canvas.dimensions.height - Canvas.dimensions.height / 4,
         rotation: degToRad(180),
     }, {
+        tag: 'Player_2',
+        input: 'p2',
         color: "#e04343",
         x: (Canvas.dimensions.width / 2) - this._pWidth * 1.25,
         y: Canvas.dimensions.height / 4,
         rotation: 0,
+        
     }, /* {
+        tag: 'Player_3',
+        input: 'p3',
         color: "#20ce67",
         x: (Canvas.dimensions.width / 2) - this._pWidth * 1.25,
         y: Canvas.dimensions.height - Canvas.dimensions.height / 2.5,
         rotation: degToRad(180),
     }, {
+        tag: 'Player_4',
+        input: 'p4',
         color: "#6c25da",
         x: (Canvas.dimensions.width / 2) + this._pWidth * .25,
         y: Canvas.dimensions.height / 2.5,
         rotation: 0,
     } */];
 
+    _score = {};
     _alivePlayers = [];
-    _message;
-
+    _messageTimeout = null;
 
     get name () {
         return "MainScene";
@@ -37,61 +46,82 @@ class MainScene extends Scene {
     
     onEnable () {
         super.onEnable();
-        
-        this._displayMessage('Fight!', 2000);
+
+        this._resetScore();
     }
 
+    restart () {
+        this._score[this._alivePlayers[0]]++;
 
-    start () {
-        super.start();
-        
-        for (let i = 0; i < this._players.length; i++) {
-            const { x, y, color, rotation } = this._players[i];
+        this._alivePlayers = [];
 
-            const tag = `Player_${i + 1}`;
+        super.restart();
+    }
 
-            this.addMonoBehaviour(new Player(tag, {
-                x,
-                y,
-                rotation,
-                color,
+    start () {        
+        for (const player of this._players) {
+            this.addMonoBehaviour(new Player(player.tag, {
+                x: player.x,
+                y: player.y,
+                rotation: player.rotation,
+                color: player.color,
                 height: this._pHeight,
                 width: this._pWidth,
                 damage: this._pDamage,
                 speed: this._pSpeed,
                 rotationSpeed: this._pRotationSpeed,
-                input: gameConfig.inputs[`p${i + 1}`],
+                input: gameConfig.inputs[player.input],
             }));
 
-            this._alivePlayers.push(tag);
+            this._alivePlayers.push(player.tag);
 
-            this.getMonoBehaviour(tag).onDeath(() => this._onPlayerDeath(tag));
+            this.getMonoBehaviour(player.tag)
+                .onDeath(() => this._onPlayerDeath(player.tag));
         }
-    }
 
-    draw () {
-        super.draw();
+        if (!Object.keys(this._score).length) this._resetScore();
         
-        this._message && Canvas.displayText({ text: this._message });
-    }
-  
-    _displayMessage (message, lifespan = 5000) {
-        this._message = message;
+        this.addMonoBehaviours([
+            new GUIText({
+                id: 'ScoreText',
+                text: Object.keys(this._score).map(player => this._score[player]).join(' x '),
+                y: Canvas.center.y - (Canvas.center.y - 40),
+                size: 40
+            }),
+            new GUIText({ id: 'MessageText' }),
+        ])
 
-        setTimeout(() => this._message = '', lifespan);
+        this._displayMessage('Fight!', 2000);
+    }
+
+    _resetScore () {
+        this._players.forEach(({ tag }) => {
+            this._score[tag] = 0
+        })
+    }
+
+    _displayMessage (message, lifespan = 5000) {
+        this.getMonoBehaviour('MessageText').text = message;
+
+        setTimeout(() => {
+            (this.getMonoBehaviour('MessageText') || {}).text = '';
+        }, lifespan);
     }
 
     _onPlayerDeath (tag) {
-        if (this._alivePlayers.length < 1) return;
+        if (this._alivePlayers.length <= 1) return;
 
-        this._alivePlayers.pop(tag);
+        this._alivePlayers.splice(this._alivePlayers.indexOf(tag), 1);
         
         this._alivePlayers.length === 1 && this._endGame();
     }
 
     _endGame () {
-        this._displayMessage(`${this._alivePlayers[0].replace('_', ' ')} wins!`, 2000);
+        const [ lastPlayer ] = this._alivePlayers;
 
-        setTimeout(() => SceneManager.reloadActiveScene(), 2500);
+        this._displayMessage(`${lastPlayer.replace('_', ' ')} wins!`, 2000);
+
+        setTimeout(() => this.restart(), 2500);
     }
+
 }
